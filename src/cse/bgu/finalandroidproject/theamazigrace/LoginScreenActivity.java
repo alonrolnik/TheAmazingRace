@@ -202,6 +202,11 @@ public class LoginScreenActivity extends Activity {
 
 			try {
 				// Simulate network access.
+				// http get
+				// do something with response
+				//if valid go to user menu activity
+				//else go back to login screen
+				
 				Thread.sleep(2000);
 			} catch (InterruptedException e) {
 				return false;

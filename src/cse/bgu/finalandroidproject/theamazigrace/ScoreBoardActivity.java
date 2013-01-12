@@ -6,6 +6,11 @@ import android.view.Menu;
 
 public class ScoreBoardActivity extends Activity {
 
+/***
+ * Display the leaderBord of the game
+ * 
+ */
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

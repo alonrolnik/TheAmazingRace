@@ -34,10 +34,11 @@
     <ScrollView
         android:id="@+id/login_form"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="458dp" >
 
         <LinearLayout
             style="@style/LoginFormContainer"
+            android:layout_height="match_parent"
             android:orientation="vertical" >
 
             <EditText
@@ -70,7 +71,26 @@
                 android:paddingLeft="32dp"
                 android:paddingRight="32dp"
                 android:text="@string/action_sign_in_register" />
-        </LinearLayout>
-    </ScrollView>
 
+            <EditText
+                android:id="@+id/editText1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:text="New user?" >
+
+                <requestFocus />
+            </EditText>
+
+            <Button
+                android:id="@+id/button1"
+                android:layout_width="119dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:text="Register" />
+            
+        </LinearLayout>
+
+    </ScrollView>
+	
 </merge>

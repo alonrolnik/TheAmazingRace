@@ -4,6 +4,15 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
 
+/***
+ * 
+ * @author alon
+ * 	userMenu contains 4 buttons
+ * First button connect us to the "User details" activity
+ * Second button connect us to the "Play an existing game" activity
+ * Third button connect us to the "Edit an existing game" activity
+ * Forth button connect us to the "Create a new game" activity
+ */
 public class UserMenuActivity extends Activity {
 
 	@Override
