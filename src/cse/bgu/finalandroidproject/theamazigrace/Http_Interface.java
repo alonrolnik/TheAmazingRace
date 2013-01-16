@@ -1,14 +1,19 @@
 package cse.bgu.finalandroidproject.theamazigrace;
 
+import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
 
+import org.apache.http.entity.StringEntity;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
@@ -75,16 +80,16 @@ public class Http_Interface{
 	// the web page content as a InputStream, which it returns as
 	// a string.
 	/**
-	 * fire an http GET to requested url 
+	 * fire an http GET to requested url returns JSONArray 
 	 * @param url
-	 * @return JSONObject
+	 * @return JSONArray
 	 * @throws IOException
 	 */
-	private static JSONObject httpGet(String my_url) throws IOException {
+	public static JSONArray httpGet(String my_url) throws IOException {
 		InputStream is = null;
 		// Only display the first 500 characters of the retrieved content
 		int len = 500;
-		JSONObject myJSON = null;
+		JSONArray myJSON = null;
 
 		try {
 			URL url = new URL(my_url);
@@ -98,13 +103,17 @@ public class Http_Interface{
 			int response = conn.getResponseCode();
 			Log.d(DEBUG_TAG, "The response is: " + response);
 			is = conn.getInputStream();
+			
+			String json = readIt(is, len);
+			try {
+				myJSON = new JSONArray(json);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return myJSON;
 
-			// Convert the InputStream into a string
-			myJSON = is.
-			String contentAsString = readIt(is, len);
-			return contentAsString;
-
-			// Makes sure that the InputStream is closed after the app is
+			// Makes sure that the InputStream is closed after
 			// finished using it.
 		} finally {
 			if (is != null) {
@@ -112,9 +121,63 @@ public class Http_Interface{
 			} 
 		}
 	}
+	
+	/**
+	 * fire an http POST with JSON to requested url
+	 * @param my_url
+	 * @param json
+	 * @throws IOException
+	 */
+	public static void httpPost(String my_url, JSONObject json) throws IOException {
+		OutputStream os = null;
+		InputStream is = null;
+		int len = 500;
+		String json_s = json.toString();
+		
+		try {
+			URL url = new URL(my_url);
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setReadTimeout(10000 /* milliseconds */);
+			conn.setConnectTimeout(15000 /* milliseconds */);
+			conn.setFixedLengthStreamingMode(json_s.getBytes().length);
+			conn.setRequestMethod("POST");
+			conn.setRequestProperty("Content-type", "application/json");
+			conn.setRequestProperty("Accept", "application/json");
 
-	//Reads an InputStream and converts it to a String.
-	public String readIt(InputStream stream, int len) throws IOException, UnsupportedEncodingException {
+			// Starts the query
+			conn.connect();
+			
+			//setup send
+			os = new BufferedOutputStream(conn.getOutputStream());
+			os.write(json_s.getBytes());
+			//clean up
+			os.flush();
+
+			//do something with response
+			is = conn.getInputStream();
+			String responseString = readIt(is,len);
+			int response = conn.getResponseCode();
+			Log.d(DEBUG_TAG, "The response is: " + response);
+			
+			// Makes sure that the InputStream is closed after
+			// finished using it.
+		} finally {
+			if (os != null) {
+				os.close();
+				is.close();
+			} 
+		}
+	}
+
+	/**
+	 * Reads an InputStream and converts it to a String.
+	 * @param stream
+	 * @param len
+	 * @return
+	 * @throws IOException
+	 * @throws UnsupportedEncodingException
+	 */
+	private static String readIt(InputStream stream, int len) throws IOException, UnsupportedEncodingException {
 		Reader reader = null;
 		reader = new InputStreamReader(stream, "UTF-8");        
 		char[] buffer = new char[len];
