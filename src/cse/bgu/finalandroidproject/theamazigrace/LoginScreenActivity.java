@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -204,8 +205,9 @@ public class LoginScreenActivity extends Activity {
 				// Simulate network access.
 				// http get
 				// do something with response
-				//if valid go to user menu activity
+				//if valid go to list of games activity
 				//else go back to login screen
+				
 				
 				Thread.sleep(2000);
 			} catch (InterruptedException e) {
@@ -228,8 +230,9 @@ public class LoginScreenActivity extends Activity {
 		protected void onPostExecute(final Boolean success) {
 			mAuthTask = null;
 			showProgress(false);
-
+			
 			if (success) {
+				
 				finish();
 			} else {
 				mPasswordView

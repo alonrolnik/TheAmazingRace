@@ -52,35 +52,8 @@ public class Http_Interface{
 		}
 	}
 
-	// Uses AsyncTask to create a task away from the main UI thread. This task takes a 
-	// URL string and uses it to create an HttpUrlConnection. Once the connection
-	// has been established, the AsyncTask downloads the contents of the webpage as
-	// an InputStream. Finally, the InputStream is converted into a string, which is
-	// displayed in the UI by the AsyncTask's onPostExecute method.
-	private class DownloadWebpageText extends AsyncTask {
-		@Override
-		protected String doInBackground(String... urls) {
-
-			// params comes from the execute() call: params[0] is the url.
-			try {
-				return downloadUrl(urls[0]);
-			} catch (IOException e) {
-				return "Unable to retrieve web page. URL may be invalid.";
-			}
-		}
-		// onPostExecute displays the results of the AsyncTask.
-		@Override
-		protected void onPostExecute(String result) {
-			textView.setText(result);
-		}
-	}
-
-
-	// Given a URL, establishes an HttpUrlConnection and retrieves
-	// the web page content as a InputStream, which it returns as
-	// a string.
 	/**
-	 * fire an http GET to requested url returns JSONArray 
+	 * fire an http GET to requested url. returns JSONArray 
 	 * @param url
 	 * @return JSONArray
 	 * @throws IOException
@@ -130,8 +103,7 @@ public class Http_Interface{
 	 */
 	public static void httpPost(String my_url, JSONObject json) throws IOException {
 		OutputStream os = null;
-		InputStream is = null;
-		int len = 500;
+//		InputStream is = null;
 		String json_s = json.toString();
 		
 		try {
@@ -143,6 +115,7 @@ public class Http_Interface{
 			conn.setRequestMethod("POST");
 			conn.setRequestProperty("Content-type", "application/json");
 			conn.setRequestProperty("Accept", "application/json");
+			conn.setDoOutput(true);
 
 			// Starts the query
 			conn.connect();
@@ -154,8 +127,8 @@ public class Http_Interface{
 			os.flush();
 
 			//do something with response
-			is = conn.getInputStream();
-			String responseString = readIt(is,len);
+		//	is = conn.getInputStream();
+		//	String responseString = readIt(is,len);
 			int response = conn.getResponseCode();
 			Log.d(DEBUG_TAG, "The response is: " + response);
 			
@@ -164,11 +137,11 @@ public class Http_Interface{
 		} finally {
 			if (os != null) {
 				os.close();
-				is.close();
+		//		is.close();
 			} 
 		}
 	}
-
+	
 	/**
 	 * Reads an InputStream and converts it to a String.
 	 * @param stream

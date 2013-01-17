@@ -4,12 +4,36 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
 
-public class GamesListActivity extends Activity {
+public class GamesListActivity extends AcbWithMenu {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_games_list);
+		
+		
+		mydb = new DB_Intrface(this);
+	 	mydb.open();
+		jokeList = (ArrayList<Joke>) mydb.getAllJokes();
+		mydb.close();
+		
+		ArrayAdapter<Joke> adapter = new ArrayAdapter<Joke>(this,
+									 android.R.layout.simple_list_item_1,
+									 jokeList);
+		listView = (ListView) findViewById(android.R.id.list);
+		listView.setOnItemClickListener(new OnItemClickListener(){
+			@Override
+			public void onItemClick(AdapterView<?> parent, View v, 
+                int position, long id) {   
+				Intent intent = new Intent (parent.getContext(), cse.bgu.ex5.jokelistbook.ViewJoke.class);
+				intent.putExtra(KEY, jokeList.get(position).getId());
+	        //    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+	    		startActivity(intent);
+	        }
+		}
+		);
+	    listView.setAdapter(adapter);
+
 	}
 
 	@Override

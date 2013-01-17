@@ -6,9 +6,8 @@ package cse.bgu.finalandroidproject.theamazigrace;
  *
  */
 public class User {
-	private String name;
-	private String email;
-	private String password;
-	
-
+	int usrId;
+	private String usrNme;
+	private String emal;
+	private String pass;
 }
