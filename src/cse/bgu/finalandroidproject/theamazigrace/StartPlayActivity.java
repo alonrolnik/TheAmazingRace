@@ -1,10 +1,14 @@
 package cse.bgu.finalandroidproject.theamazigrace;
 
-import android.os.Bundle;
+import com.google.android.gms.maps.GoogleMap;
+
 import android.app.Activity;
+import android.os.Bundle;
 import android.view.Menu;
+import android.view.View;
 
 public class StartPlayActivity extends Activity {
+    private GoogleMap mMap;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +40,18 @@ public class StartPlayActivity extends Activity {
 		super.setTitle(title);
 	}
 
+	/**
+	 *After clicking on "check it" and he arrived to the right place,
+	 *an android dialog pop up with the relevant question and 4 possible answers.
+	 *after clicking the right answer update his score,
+	 *remove dialog,
+	 *fetch the next checkpoint,
+	 *put it on the map and continue.
+	 * @param view
+	 */
+	public void check_it(View view){
+
+	}
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.

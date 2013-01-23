@@ -2,13 +2,13 @@ package cse.bgu.finalandroidproject.theamazigrace;
 
 import org.xmlpull.v1.XmlPullParserException;
 
+import android.R;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Handler;
-import android.os.Message;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
