@@ -9,56 +9,16 @@
         android:targetSdkVersion="17" />
 
     <uses-permission android:name="android.permission.INTERNET" />
-	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="cse.bgu.finalandroidproject.theamazigrace.SplashScreenActivity"
-            android:label="@string/app_name" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name="cse.bgu.finalandroidproject.theamazigrace.LoginScreenActivity"
-            android:label="@string/title_activity_login"
-            android:windowSoftInputMode="adjustResize|stateVisible" >
-            
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            
-        </activity>
-        <activity
-            android:name="cse.bgu.finalandroidproject.theamazigrace.ScoreBoardActivity"
-            android:label="@string/title_activity_score_board" >
-        </activity>
-        <activity
-            android:name="cse.bgu.finalandroidproject.theamazigrace.GamesListActivity"
-            android:label="@string/title_activity_games_list" >
-        </activity>
-        <activity
-            android:name="cse.bgu.finalandroidproject.theamazigrace.ViewGameActivity"
-            android:label="@string/title_activity_view_game" >
-        </activity>
-        <activity
-            android:name="cse.bgu.finalandroidproject.theamazigrace.StartPlayActivity"
-            android:label="@string/title_activity_start_play" >
-        </activity>
-        <activity
-            android:name="cse.bgu.finalandroidproject.theamazigrace.CreateNewGameActivity"
-            android:label="@string/title_activity_create_new_game" >
-        </activity>
-        <activity
-            android:name="cse.bgu.finalandroidproject.theamazigrace.UserMenuActivity"
-            android:label="@string/title_activity_user_menu" >
+            android:name="cse.bgu.finalandroidproject.theamazigrace.PlayGame"
+            android:label="@string/title_activity_play_game" >
         </activity>
     </application>
 

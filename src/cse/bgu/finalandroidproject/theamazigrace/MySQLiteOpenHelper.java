@@ -6,77 +6,86 @@ import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class MySQLiteOpenHelper extends SQLiteOpenHelper {
-
-	private static final String TEXT_TYPE = " TEXT";
-	private static final String COMMA_SEP = ",";
 	
-	private static final String USER_DEATAILS_ENTRIES = 
-			DB_Schema.UserDetails._ID + COMMA_SEP +
-			DB_Schema.UserDetails.USER_NAME + COMMA_SEP +
-			DB_Schema.UserDetails.EMAIL + COMMA_SEP +
-			DB_Schema.UserDetails.PASSWORD;
-
-	private static final String GAMES_ENTRIES = 
-			DB_Schema.GamLstTable._ID + COMMA_SEP +
-			DB_Schema.GamLstTable.GAME_NAME + COMMA_SEP +
-			DB_Schema.GamLstTable.CREATOR + COMMA_SEP +
-			DB_Schema.GamLstTable.AREA + COMMA_SEP +
-			DB_Schema.GamLstTable.LEADING_SCORE;
-
-	private static final String GAME_STATISTICS_ENTRIES = 
-			DB_Schema.GamStatsc._ID + COMMA_SEP +
-			DB_Schema.GamStatsc.DATE + COMMA_SEP +
-			DB_Schema.GamStatsc.TIME_TO_FINISH + COMMA_SEP +
-			DB_Schema.GamStatsc.SCORE;
-
-	private static final String GAME_SCENARIO_ENTRIES = 
-			DB_Schema.GmeScenro._ID + COMMA_SEP +
-			DB_Schema.GmeScenro.CHECKPOINT + COMMA_SEP +
-			DB_Schema.GmeScenro.CHALLENGE + COMMA_SEP +
-			DB_Schema.GmeScenro.RIGHT_ANSWER + COMMA_SEP +
-			DB_Schema.GmeScenro.AVAILABLE_ANSWERS + COMMA_SEP +
-			DB_Schema.GmeScenro.NEXT_CHECKPOINT;
-
-	
-	private static final String SQL_CREATE_ENTRIES = "create table " +
-			MyDB.JokesTable.TABLE_NAME + "(" +
-			MyDB.JokesTable._ID + " integer primary key autoincrement, " +
-			MyDB.JokesTable.COLUMN_NAME_JOKES + TEXT_TYPE + COMMA_SEP +
-			MyDB.JokesTable.COLUMN_NAME_CREATOR + TEXT_TYPE + COMMA_SEP +
-			MyDB.JokesTable.COLUMN_NAME_DATE + TEXT_TYPE + COMMA_SEP + 
-			MyDB.JokesTable.COLUMN_NAME_LIKE + TEXT_TYPE +
-			" text not null" +
-			" );";
-
-	private static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + TABLE_NAME_ENTRIES;
+	private static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS ";
 	public static final int DATABASE_VERSION = 1;
-	public static final String DATABASE_NAME = "jokes.db";
 
-	
-	
-	
+
 	//create helper object to manipulate database
 	public MySQLiteOpenHelper(Context context, String name,
 			CursorFactory factory, int version) {
-		super(context, DATABASE_NAME, null, DATABASE_VERSION);
+		super(context, DB_Schema.dbName, null, DATABASE_VERSION);
 		// TODO Auto-generated constructor stub
 	}
 	
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		// TODO Auto-generated method stub
-        db.execSQL(SQL_CREATE_ENTRIES);
+		// create user table
+        db.execSQL
+        		(
+	        		"create table " +
+	        		DB_Schema.UserDetails.TABLE_NAME +
+	        		"(" +
+	        		DB_Schema.UserDetails._ID +
+	        		" integer primary key autoincrement, " +
+	        		DB_Schema.UserDetails.USER_NAME + "text ," +
+	        		DB_Schema.UserDetails.PASSWORD + "text ," +
+	        		DB_Schema.UserDetails.EMAIL + "text ," +
+	        		"text not null" +
+	        		" );"
+        		);	
+        
 
+     // create games list table
+        db.execSQL
+        		(
+	        		"create table " +
+	        		DB_Schema.GamLstTable.TABLE_NAME +
+	        		"(" +
+	        		DB_Schema.GamLstTable._ID +
+	        		" integer primary key autoincrement, " +
+	        		DB_Schema.GamLstTable.GAME_NAME + "text ," +
+	        		DB_Schema.GamLstTable.CREATOR + "text ," +
+	        		DB_Schema.GamLstTable.AREA + "text ," +
+	        		DB_Schema.GamLstTable.LEADING_SCORE + "Integer ," +
+	        		" );"
+        		);
+     // create game statistics table
+        db.execSQL
+        		(
+	        		"create table " +
+	        		DB_Schema.GamStatsc.TABLE_NAME +
+	        		"(" +
+	        		DB_Schema.GamStatsc._ID +
+	        		" integer primary key autoincrement, " +
+	        		DB_Schema.GamStatsc.DATE + "text ," +
+	        		DB_Schema.GamStatsc.SCORE + "Integer ," +
+	        		DB_Schema.GamStatsc.TIME_TO_FINISH + "Integer ," +
+	        		" );"
+        		);
+     // create game scenario table
+        db.execSQL
+        		(
+	        		"create table " +
+	        		DB_Schema.GmeScenro.TABLE_NAME +
+	        		"(" +
+	        		DB_Schema.GmeScenro._ID +
+	        		" integer primary key autoincrement, " +
+	        		DB_Schema.GmeScenro.CHECKPOINT + "text ," +
+	        		DB_Schema.GmeScenro.CHALLENGE + "text ," +
+	        		DB_Schema.GmeScenro.RIGHT_ANSWER + "text ," +
+	        		DB_Schema.GmeScenro.AVAILABLE_ANSWERS + "text ," +
+	        		DB_Schema.GmeScenro.NEXT_CHECKPOINT + "text ," +
+
+	        		"text not null" +
+	        		" );"
+	        	);
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		// TODO Auto-generated method stub
-        // This database is only a cache for online data, so its upgrade policy is
-        // to simply to discard the data and start over
-        db.execSQL(SQL_DELETE_ENTRIES);
-        onCreate(db);	
-
+		
 	}
-
 }

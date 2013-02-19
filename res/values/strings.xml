@@ -10,5 +10,6 @@
     <string name="title_activity_start_play">StartPlay</string>
     <string name="title_activity_create_new_game">CreateNewGame</string>
     <string name="title_activity_user_menu">UserMenu</string>
+    <string name="title_activity_play_game">PlayGame</string>
 
 </resources>

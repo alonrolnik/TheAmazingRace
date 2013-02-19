@@ -9,7 +9,7 @@ public class DB_Schema {
 	 */
 	private DB_Schema() {}
 
-	
+	public static final String dbName = "myDB";
 	public static abstract class UserDetails implements BaseColumns{
 
 	    public static final String TABLE_NAME = "user_details";
