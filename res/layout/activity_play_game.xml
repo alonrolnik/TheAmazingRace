@@ -1,14 +1,93 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/LinearLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".PlayGame" >
 
-    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-  android:id="@+id/map"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  class="com.google.android.gms.maps.MapFragment"/>
-    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
 
-</RelativeLayout>
+    <TextView android:id="@+id/label_latlng"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="22sp"
+        android:text="@string/latlng" />
+    <TextView android:id="@+id/latlng"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp" />
+    <TextView android:id="@+id/label_address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="22sp"
+        android:text="@string/address" />
+
+    <TextView
+        android:id="@+id/address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp" />
+
+</LinearLayout>
+    
+      <TextView
+    android:id="@+id/tap_text"
+    android:text="@string/tap_instructions"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"/>
+  <TextView
+    android:id="@+id/camera_text"
+    android:text="@string/move_the_camera"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"/>
+    
+    <fragment
+        android:id="@+id/map"
+        android:layout_width="match_parent"
+        android:layout_height="210dp"
+        android:layout_weight="0.27"
+        class="com.google.android.gms.maps.SupportMapFragment" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:onClick="checkMyLocation"
+            android:text="@string/check_my_location" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="34dp"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/provider_fine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_inactive"
+            android:minWidth="160sp"
+            android:onClick="useFineProvider"
+            android:text="@string/use_fine_provider" />
+
+        <Button
+            android:id="@+id/provider_both"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_inactive"
+            android:minWidth="160sp"
+            android:onClick="useCoarseFineProviders"
+            android:text="@string/use_both_providers" />
+    </LinearLayout>
+
+</LinearLayout>
