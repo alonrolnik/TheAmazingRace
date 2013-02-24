@@ -1,8 +1,13 @@
 package cse.bgu.finalandroidproject.theamazingrace;
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
+import android.view.WindowManager.LayoutParams;
+import android.widget.Button;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.GoogleMap;
@@ -23,6 +28,7 @@ public class PlayGame extends android.support.v4.app.FragmentActivity
     private GoogleMap mMap;
     private TextView mTapTextView;
     private TextView mCameraTextView;
+    private Button checkMyLocation;
 
  
 
@@ -32,7 +38,7 @@ public class PlayGame extends android.support.v4.app.FragmentActivity
 		setContentView(R.layout.activity_play_game);
         mTapTextView = (TextView) findViewById(R.id.tap_text);
         mCameraTextView = (TextView) findViewById(R.id.camera_text);
-
+        checkMyLocation = (Button) findViewById(R.id.button1);
 		setUpMapIfNeeded();
 	}
 
@@ -97,6 +103,17 @@ public class PlayGame extends android.support.v4.app.FragmentActivity
     	// call to checkArea
     	// if true show popup window with the challenge
     	// if false alert the client and return
+        LayoutInflater layoutInflater 
+        = (LayoutInflater)getBaseContext()
+         .getSystemService(LAYOUT_INFLATER_SERVICE);  
+       View popupView = layoutInflater.inflate(R.layout.popup_window, null);  
+                final PopupWindow popupWindow = new PopupWindow(
+                  popupView, 
+                  LayoutParams.WRAP_CONTENT,  
+                        LayoutParams.WRAP_CONTENT);  
+                popupWindow.showAsDropDown(checkMyLocation, 200, 100 );
+               // findViewById(R.id.popuplayout).setBackgroundColor(Color.CYAN);
+    	
     }
     
 
