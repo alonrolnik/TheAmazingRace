@@ -111,7 +111,7 @@ public class PlayGame extends android.support.v4.app.FragmentActivity
                   popupView, 
                   LayoutParams.WRAP_CONTENT,  
                         LayoutParams.WRAP_CONTENT);  
-                popupWindow.showAsDropDown(checkMyLocation, 200, 100 );
+                popupWindow.showAsDropDown(checkMyLocation, 100, 100 );
                // findViewById(R.id.popuplayout).setBackgroundColor(Color.CYAN);
     	
     }
