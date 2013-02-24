@@ -1,31 +1,10 @@
 package cse.bgu.finalandroidproject.theamazingrace;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Locale;
-
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.location.Address;
-import android.location.Geocoder;
-import android.location.Location;
-import android.location.LocationManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.provider.Settings;
-import android.support.v4.app.DialogFragment;
 import android.view.Menu;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.android.location.R;
-import com.example.android.location.LocationActivity.EnableGpsDialogFragment;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
@@ -45,27 +24,7 @@ public class PlayGame extends android.support.v4.app.FragmentActivity
     private TextView mTapTextView;
     private TextView mCameraTextView;
 
-    private TextView mLatLng;
-    private TextView mAddress;
-    private Button mFineProviderButton;
-    private Button mBothProviderButton;
-    private LocationManager mLocationManager;
-    private Handler mHandler;
-    private boolean mGeocoderAvailable;
-    private boolean mUseFine;
-    private boolean mUseBoth;
-
-    // Keys for maintaining UI states after rotation.
-    private static final String KEY_FINE = "use_fine";
-    private static final String KEY_BOTH = "use_both";
-    // UI handler codes.
-    private static final int UPDATE_ADDRESS = 1;
-    private static final int UPDATE_LATLNG = 2;
-
-    private static final int TEN_SECONDS = 10000;
-    private static final int TEN_METERS = 10;
-    private static final int TWO_MINUTES = 1000 * 60 * 2;
-
+ 
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -83,39 +42,8 @@ public class PlayGame extends android.support.v4.app.FragmentActivity
         setUpMapIfNeeded();
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        // Check if the GPS setting is currently enabled on the device.
-        // This verification should be done during onStart() because the system calls this method
-        // when the user returns to the activity, which ensures the desired location provider is
-        // enabled each time the activity resumes from the stopped state.
-        LocationManager locationManager =
-                (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        final boolean gpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-
-        if (!gpsEnabled) {
-            // Build an alert dialog here that requests that the user enable
-            // the location services, then when the user clicks the "OK" button,
-            // call enableLocationSettings()
-            new EnableGpsDialogFragment().show(getSupportFragmentManager(), "enableGpsDialog");
-        }
-    }
 
     
-    // Method to launch Settings
-    private void enableLocationSettings() {
-        Intent settingsIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-        startActivity(settingsIntent);
-    }
-
-    // Stop receiving location updates whenever the Activity becomes invisible.
-    @Override
-    protected void onStop() {
-        super.onStop();
-        mLocationManager.removeUpdates(listener);
-    }
 
     /**
      * Sets up the map if it is possible to do so (i.e., the Google Play services APK is correctly
@@ -166,7 +94,9 @@ public class PlayGame extends android.support.v4.app.FragmentActivity
      * This should check if he arrived to the right place
      */
     public void checkMyLocation(View view){
-    	
+    	// call to checkArea
+    	// if true show popup window with the challenge
+    	// if false alert the client and return
     }
     
 
@@ -193,62 +123,6 @@ public class PlayGame extends android.support.v4.app.FragmentActivity
 	}
 	
 	
-    // AsyncTask encapsulating the reverse-geocoding API.  Since the geocoder API is blocked,
-    // we do not want to invoke it from the UI thread.
-    private class ReverseGeocodingTask extends AsyncTask<Location, Void, Void> {
-        Context mContext;
 
-        public ReverseGeocodingTask(Context context) {
-            super();
-            mContext = context;
-        }
-
-        @Override
-        protected Void doInBackground(Location... params) {
-            Geocoder geocoder = new Geocoder(mContext, Locale.getDefault());
-
-            Location loc = params[0];
-            List<Address> addresses = null;
-            try {
-                addresses = geocoder.getFromLocation(loc.getLatitude(), loc.getLongitude(), 1);
-            } catch (IOException e) {
-                e.printStackTrace();
-                // Update address field with the exception.
-                Message.obtain(mHandler, UPDATE_ADDRESS, e.toString()).sendToTarget();
-            }
-            if (addresses != null && addresses.size() > 0) {
-                Address address = addresses.get(0);
-                // Format the first line of address (if available), city, and country name.
-                String addressText = String.format("%s, %s, %s",
-                        address.getMaxAddressLineIndex() > 0 ? address.getAddressLine(0) : "",
-                        address.getLocality(),
-                        address.getCountryName());
-                // Update address field on UI.
-                Message.obtain(mHandler, UPDATE_ADDRESS, addressText).sendToTarget();
-            }
-            return null;
-        }
-    }
-
-
-    /**
-     * Dialog to prompt users to enable GPS on the device.
-     */
-    private class EnableGpsDialogFragment extends DialogFragment {
-
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            return new AlertDialog.Builder(getActivity())
-                    .setTitle(R.string.enable_gps)
-                    .setMessage(R.string.enable_gps_dialog)
-                    .setPositiveButton(R.string.enable_gps, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            enableLocationSettings();
-                        }
-                    })
-                    .create();
-        }
-    }
 
 }
