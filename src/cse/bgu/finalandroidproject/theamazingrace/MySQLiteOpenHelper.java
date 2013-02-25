@@ -36,7 +36,6 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 	        		" );"
         		);	
         
-
      // create games list table
         db.execSQL
         		(
