@@ -74,7 +74,9 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 	        		DB_Schema.GmeScenro.CHECKPOINT + "text ," +
 	        		DB_Schema.GmeScenro.CHALLENGE + "text ," +
 	        		DB_Schema.GmeScenro.RIGHT_ANSWER + "text ," +
-	        		DB_Schema.GmeScenro.AVAILABLE_ANSWERS + "text ," +
+	        		DB_Schema.GmeScenro.ANSWER1 + "text ," +
+	        		DB_Schema.GmeScenro.ANSWER2 + "text ," +
+	        		DB_Schema.GmeScenro.ANSWER3 + "text ," +
 	        		DB_Schema.GmeScenro.NEXT_CHECKPOINT + "text ," +
 
 	        		"text not null" +

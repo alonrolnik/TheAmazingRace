@@ -42,7 +42,9 @@ public class DB_Schema {
 	    public static final String CHECKPOINT = "checkpoint";
 	    public static final String CHALLENGE = "challenge";
 	    public static final String RIGHT_ANSWER = "right_answer";	
-	    public static final String AVAILABLE_ANSWERS = "available_answers";
+	    public static final String ANSWER1 = "answer1";
+	    public static final String ANSWER2 = "answer2";
+	    public static final String ANSWER3 = "answer3";
 	    public static final String NEXT_CHECKPOINT = "next_checkpoint";
 	    
 	}	    

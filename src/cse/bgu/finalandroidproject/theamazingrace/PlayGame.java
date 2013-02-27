@@ -71,7 +71,19 @@ public class PlayGame extends android.support.v4.app.FragmentActivity
     private static final int TEN_SECONDS = 10000;
     private static final int TEN_METERS = 10;
     private static final int TWO_MINUTES = 1000 * 60 * 2;
-
+	private static final int THRESHOLD = 10;
+    
+    
+    // mission variables
+    private String question = "What is the color of Nspolion white horse?";
+    private String answer1 = "Black";
+    private String answer2 = "White";
+    private String answer3 = "Red";
+    private String answer4 = "Blue";
+    private String rightAnswer = "White";
+    private Location currntPoint;
+    private Location nextPoint;
+    private int score = 0;
 
 	@SuppressLint("NewApi")
 	@Override
@@ -82,6 +94,7 @@ public class PlayGame extends android.support.v4.app.FragmentActivity
         mCameraTextView = (TextView) findViewById(R.id.camera_text);
         checkMyLocation = (Button) findViewById(R.id.button1);
 		setUpMapIfNeeded();
+
 		
         // Restore apps state (if exists) after rotation.
         if (savedInstanceState != null) {
@@ -93,9 +106,9 @@ public class PlayGame extends android.support.v4.app.FragmentActivity
         }
         mLatLng = (TextView) findViewById(R.id.latlng);
         mAddress = (TextView) findViewById(R.id.address);
-        // Receive location updates from the fine location provider (gps) only.
+        // Receive location updates from the fine location provider (GPS) only.
         mFineProviderButton = (Button) findViewById(R.id.provider_fine);
-        // Receive location updates from both the fine (gps) and coarse (network) location
+        // Receive location updates from both the fine (GPS) and coarse (network) location
         // providers.
         mBothProviderButton = (Button) findViewById(R.id.provider_both);
 
@@ -459,7 +472,7 @@ public class PlayGame extends android.support.v4.app.FragmentActivity
      * This should check if he arrived to the right place
      */
     public void checkMyLocation(View view){
-    	if (checkArea()){
+    	if (checkArea()){ //we are in the right location
     	// if false alert the client and return
         LayoutInflater layoutInflater
         = (LayoutInflater)getBaseContext()
@@ -472,11 +485,27 @@ public class PlayGame extends android.support.v4.app.FragmentActivity
                 popupWindow.showAsDropDown(checkMyLocation, 100, 100 );
                // findViewById(R.id.popuplayout).setBackgroundColor(Color.CYAN);
     	}
+    	else { //not in the right location yet
+    		Toast.makeText(this, "Not there yet, keep going!", Toast.LENGTH_LONG).show();
+    	}
     }
     
     private boolean checkArea() {
 		// TODO Auto-generated method stub
-		return true;
+    	Location myLocation = null;
+    	double distance = 0;
+    	currntPoint = new Location (requestUpdatesFromProvider(
+                LocationManager.GPS_PROVIDER, R.string.not_support_gps));
+    	currntPoint.setLatitude(31.2632050);
+    	currntPoint.setLongitude(34.8027548);
+    	myLocation = new Location (requestUpdatesFromProvider(
+                LocationManager.GPS_PROVIDER, R.string.not_support_gps));
+    	
+    	distance = myLocation.distanceTo(currntPoint);
+    	if (distance < THRESHOLD)
+    		return true;
+    	else
+    		return false;
 	}
 
 	@Override
@@ -500,5 +529,6 @@ public class PlayGame extends android.support.v4.app.FragmentActivity
 		getMenuInflater().inflate(R.menu.activity_play_game, menu);
 		return true;
 	}
+	
 
 }
