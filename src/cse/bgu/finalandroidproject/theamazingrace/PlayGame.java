@@ -1,8 +1,12 @@
 package cse.bgu.finalandroidproject.theamazingrace;
 
 import java.io.IOException;
+import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -25,7 +29,6 @@ import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
-import android.view.WindowManager.LayoutParams;
 import android.widget.Button;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -60,7 +63,7 @@ public class PlayGame extends android.support.v4.app.FragmentActivity
     private boolean mGeocoderAvailable;
     private boolean mUseFine;
     private boolean mUseBoth;
-    
+
     // Keys for maintaining UI states after rotation.
     private static final String KEY_FINE = "use_fine";
     private static final String KEY_BOTH = "use_both";
@@ -75,15 +78,35 @@ public class PlayGame extends android.support.v4.app.FragmentActivity
     
     
     // mission variables
-    private String question = "What is the color of Nspolion white horse?";
-    private String answer1 = "Black";
-    private String answer2 = "White";
-    private String answer3 = "Red";
-    private String answer4 = "Blue";
-    private String rightAnswer = "White";
+    private String question;
+    private String answers[] = new String[4];
     private Location currntPoint;
     private Location nextPoint;
     private int score = 0;
+    
+    //new *****************************************************
+    private Button bAnswer1;
+    private Button bAnswer2;
+    private Button bAnswer3;
+    private Button bAnswer4;
+    private Button bContinue;
+    private TextView dScore;
+    private TextView dQuestion;
+    private int answersStatus[] = {3, 3, 3, 3};
+    private int bonus[] = {10, 5,  2,  1};
+    private int counter = 0;
+    private boolean flag = false;
+    
+    Challenge newChallenge[] = {new Challenge (new LatLng(30, 34), new LatLng(31, 34), "Hello whats my name?", "Alon", new String[] {"Tal", "Oscar", "Gil"}),
+    							new Challenge (new LatLng(30, 34), new LatLng(31, 34), "What is the color of Napolion's white horse?", "White", new String[] {"Black", "Red", "Blue"}), 
+    							new Challenge (new LatLng(30, 34), new LatLng(31, 34), "How meny meters are in one navel mile?", "1852", new String[] {"1609", "1734", "1586"}),
+    							new Challenge (new LatLng(30, 34), new LatLng(0.0, 0.0), "Where are we?", "All the answers are correct", new String[] {"bilding 95", "lab 105", "B.G.U"})}; 
+    
+    List<Challenge> myList = new ArrayList<Challenge>();
+    Iterator<Challenge> myIterator=null;
+    
+    
+    // end new ************************************************
 
 	@SuppressLint("NewApi")
 	@Override
@@ -132,6 +155,21 @@ public class PlayGame extends android.support.v4.app.FragmentActivity
         // Get a reference to the LocationManager object.
         mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
+        
+        // loading the first challenge
+        //////////////////////////////////////////////////////////////////
+        myList.add(newChallenge[0]);
+        myList.add(newChallenge[1]);
+        myList.add(newChallenge[2]);
+        myList.add(newChallenge[3]);
+        
+        //Challenge curChallenge = myList.iterator().next();
+        if (myIterator==null) 
+			myIterator = myList.iterator();
+		
+        suffleAnswers(myIterator.next());
+        
+        /////////////////////////////////////////////////////////////////
 		
 	}
 
@@ -466,33 +504,160 @@ public class PlayGame extends android.support.v4.app.FragmentActivity
         mMap.setOnCameraChangeListener(this);
     }
     
+    
+    
     /**
      * When the player want to know if he arrived to the right checkpoint he should press 
      * the "check my location !!!" button.
      * This should check if he arrived to the right place
      */
     public void checkMyLocation(View view){
-    	if (checkArea()){ //we are in the right location
-    	// if false alert the client and return
-        LayoutInflater layoutInflater
-        = (LayoutInflater)getBaseContext()
-         .getSystemService(LAYOUT_INFLATER_SERVICE);  
-       View popupView = layoutInflater.inflate(R.layout.popup_window, null);  
-                final PopupWindow popupWindow = new PopupWindow(
-                  popupView, 
-                  LayoutParams.WRAP_CONTENT,  
-                        LayoutParams.WRAP_CONTENT);  
-                popupWindow.showAsDropDown(checkMyLocation, 100, 100 );
-               // findViewById(R.id.popuplayout).setBackgroundColor(Color.CYAN);
-    	}
-    	else { //not in the right location yet
-    		Toast.makeText(this, "Not there yet, keep going!", Toast.LENGTH_LONG).show();
+    	if (flag) {
+    		if (checkArea()){ //we are in the right location
+    			// if false alert the client and return
+    			flag = false;
+    			LayoutInflater layoutInflater = (LayoutInflater)getBaseContext().getSystemService(LAYOUT_INFLATER_SERVICE);  
+    			View popupView = layoutInflater.inflate(R.layout.popup_window, null);  
+    			final PopupWindow popupWindow = new PopupWindow(popupView, 500/*LayoutParams.WRAP_CONTENT*/, 800/*LayoutParams.WRAP_CONTENT*/); 
+
+    			//setContentView(R.layout.popup_window);
+    			bAnswer1 = (Button) popupView.findViewById(R.id.radioButton1);
+    			bAnswer2 = (Button) popupView.findViewById(R.id.radioButton2);
+    			bAnswer3 = (Button) popupView.findViewById(R.id.radioButton3);
+    			bAnswer4 = (Button) popupView.findViewById(R.id.radioButton4);
+    			bContinue = (Button) popupView.findViewById(R.id.button1);
+    			dScore = (TextView) popupView.findViewById(R.id.score);
+    			dQuestion = (TextView) popupView.findViewById(R.id.question);
+    			bAnswer1.setText(answers[0]);
+    			bAnswer2.setText(answers[1]);
+    			bAnswer3.setText(answers[2]);
+    			bAnswer4.setText(answers[3]);
+    			dQuestion.setText("Your question is: " + question);
+    			dScore.setText("Your current score is: " + score);
+
+    			popupWindow.showAsDropDown(checkMyLocation, 100, 100 );
+
+
+
+    			bAnswer1.setOnClickListener(new View.OnClickListener() {
+
+    				@Override
+    				public void onClick(View v) {
+    					// TODO Auto-generated method stub
+    					if (answersStatus[0] == 0) {
+    						counter++;
+    						answersStatus[0] = 1;
+    						dQuestion.setText("Wrong answer! Please try again. The question is: " + question);	
+    					}
+    					else if (answersStatus[0] == 1){
+    						dQuestion.setText("You already tried this answer! Please try again. The question is: " + question);
+    					}
+    					else if (answersStatus[0] == 2){
+    						dQuestion.setText("Correct! You won " + bonus[counter] + " points! Now lets continue to the next checkpoint...");
+    						score = score + bonus[counter];
+    						dScore.setText("Your current score is: " + score + " points!");
+    						counter = 0;
+    						resetAnswer();
+    					}
+    				}
+    			});
+
+    			bAnswer2.setOnClickListener(new View.OnClickListener() {
+
+    				@Override
+    				public void onClick(View v) {
+    					// TODO Auto-generated method stub
+    					if (answersStatus[1] == 0) {
+    						counter++;
+    						answersStatus[1] = 1;
+    						dQuestion.setText("Wrong answer! Please try again. The question is: " + question);	
+    					}
+    					else if (answersStatus[1] == 1){
+    						dQuestion.setText("You already tried this answer! Please try again. The question is: " + question);
+    					}
+    					else if (answersStatus[1] == 2){
+    						dQuestion.setText("Correct! You won " + bonus[counter] + " points! Now lets continue to the next checkpoint...");
+    						score = score + bonus[counter];
+    						dScore.setText("Your current score is: " + score + " points!");
+    						counter = 0;
+    						resetAnswer();
+    					}
+    				}
+    			});
+
+    			bAnswer3.setOnClickListener(new View.OnClickListener() {
+
+    				@Override
+    				public void onClick(View v) {
+    					// TODO Auto-generated method stub
+    					if (answersStatus[2] == 0) {
+    						counter++;
+    						answersStatus[2] = 1;
+    						dQuestion.setText("Wrong answer! Please try again. The question is: " + question);	
+    					}
+    					else if (answersStatus[2] == 1){
+    						dQuestion.setText("You already tried this answer! Please try again. The question is: " + question);
+    					}
+    					else if (answersStatus[2] == 2){
+    						dQuestion.setText("Correct! You won " + bonus[counter] + " points! Now lets continue to the next checkpoint...");
+    						score = score + bonus[counter];
+    						dScore.setText("Your current score is: " + score + " points!");
+    						counter = 0;
+    						resetAnswer();
+    					}
+    				}
+    			});
+
+    			bAnswer4.setOnClickListener(new View.OnClickListener() {
+
+    				@Override
+    				public void onClick(View v) {
+    					// TODO Auto-generated method stub
+    					if (answersStatus[3] == 0) {
+    						counter++;
+    						answersStatus[3] = 1;
+    						dQuestion.setText("Wrong answer! Please try again. The question is: " + question);	
+    					}
+    					else if (answersStatus[3] == 1){
+    						dQuestion.setText("You already tried this answer! Please try again. The question is: " + question);
+    					}
+    					else if (answersStatus[3] == 2){
+    						dQuestion.setText("Correct! You won " + bonus[counter] + " points! Now lets continue to the next checkpoint...");
+    						score = score + bonus[counter];
+    						dScore.setText("Your current score is: " + score + " points!");
+    						counter = 0;
+    						resetAnswer();
+    					}
+    				}
+    			});
+
+    			bContinue.setOnClickListener(new View.OnClickListener() {
+
+    				@Override
+    				public void onClick(View v) {
+    					// TODO Auto-generated method stub
+    					if (answersStatus[0] == 3) {
+    						
+    						popupWindow.dismiss();
+    						nextPoint();
+    						
+    					}
+    					else {
+    						dQuestion.setText("You haven't answered the question! The question is: " + question);
+    					}
+    				}
+    			});
+
+    		}
+    		else { //not in the right location yet
+    			Toast.makeText(this, "Not there yet, keep going!", Toast.LENGTH_LONG).show();
+    		}
     	}
     }
     
     private boolean checkArea() {
 		// TODO Auto-generated method stub
-    	Location myLocation = null;
+    /*	Location myLocation = null;
     	double distance = 0;
     	currntPoint = new Location (requestUpdatesFromProvider(
                 LocationManager.GPS_PROVIDER, R.string.not_support_gps));
@@ -502,10 +667,10 @@ public class PlayGame extends android.support.v4.app.FragmentActivity
                 LocationManager.GPS_PROVIDER, R.string.not_support_gps));
     	
     	distance = myLocation.distanceTo(currntPoint);
-    	if (distance < THRESHOLD)
+    	if (distance < THRESHOLD)*/
     		return true;
-    	else
-    		return false;
+    	/*else
+    		return false;*/
 	}
 
 	@Override
@@ -530,5 +695,52 @@ public class PlayGame extends android.support.v4.app.FragmentActivity
 		return true;
 	}
 	
+	public void resetAnswer() {
+		 int i;
+		 for (i = 0; i < 4; i++) {
+			 answersStatus[i] = 3;
+		 }
+	 }
 
+	public void suffleAnswers(Challenge curruntChallenge){
+		Random r = new SecureRandom();
+		int temp, i;
+        temp = r.nextInt(4);
+        question = curruntChallenge.getChallenge();
+        answers[temp] = curruntChallenge.getRight_answer();
+        answersStatus[temp] = 2;
+        for (i = 0; i < 3; i++) {
+        	temp = r.nextInt(4);
+        	if (answersStatus[temp] == 3) {
+        		answersStatus[temp] = 0;
+        		answers[temp] = curruntChallenge.getWrong_answers(i);        		
+        	}
+        	else
+        		i--;
+        }
+        flag = true;
+        
+        /*
+        currntPoint = new Location (requestUpdatesFromProvider(
+                LocationManager.GPS_PROVIDER, R.string.not_support_gps));
+    	currntPoint.setLatitude(curruntChallenge.getCheckpoint().latitude);
+    	currntPoint.setLongitude(curruntChallenge.getCheckpoint().longitude);        
+        nextPoint = new Location (requestUpdatesFromProvider(
+                LocationManager.GPS_PROVIDER, R.string.not_support_gps));
+    	nextPoint.setLatitude(curruntChallenge.getNext_checkpoint().latitude);
+    	nextPoint.setLongitude(curruntChallenge.getNext_checkpoint().longitude);
+        	*/	
+	}
+
+	public void nextPoint() {
+		/*if ((nextPoint.getLatitude() == 0.0) && (nextPoint.getLongitude() == 0.0))
+			Toast.makeText(this, "Game Over!", Toast.LENGTH_LONG).show();
+		else {*/
+			if (myIterator==null) 
+				myIterator = myList.iterator();
+			
+	        suffleAnswers(myIterator.next());
+		//}		
+	}
+	
 }

@@ -1,14 +1,33 @@
 package cse.bgu.finalandroidproject.theamazingrace;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
+import com.google.android.gms.maps.model.LatLng;
 
 public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 	
 	public static final int DATABASE_VERSION = 1;
+	private static final 	String[] projection_game = {
+		DB_Schema.GmeScenro._ID,
+		DB_Schema.GmeScenro.CHECKPOINT_LAT,
+		DB_Schema.GmeScenro.CHECKPOINT_LONG,
+		DB_Schema.GmeScenro.CHALLENGE,
+		DB_Schema.GmeScenro.RIGHT_ANSWER,
+		DB_Schema.GmeScenro.ANSWER1,
+		DB_Schema.GmeScenro.ANSWER2,
+		DB_Schema.GmeScenro.ANSWER3,
+		DB_Schema.GmeScenro.NEXT_CHECKPOINT_LAT,
+		DB_Schema.GmeScenro.NEXT_CHECKPOINT_LONG
+};
+ 
 	//create helper object to manipulate database
 	public MySQLiteOpenHelper(Context context) {
 		super(context, DB_Schema.dbName, null, DATABASE_VERSION);
@@ -70,11 +89,11 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 	        		" integer primary key autoincrement, " +
 	        		DB_Schema.GmeScenro.CHECKPOINT_LAT + " real," +
 	        		DB_Schema.GmeScenro.CHECKPOINT_LONG + " real," +
-	        		DB_Schema.GmeScenro.CHALLENGE + " text, text not null" +
-	        		DB_Schema.GmeScenro.RIGHT_ANSWER + " text, text not null" +
-	        		DB_Schema.GmeScenro.ANSWER1 + " text, text not null" +
-	        		DB_Schema.GmeScenro.ANSWER2 + " text, text not null" +
-	        		DB_Schema.GmeScenro.ANSWER3 + " text, text not null" +
+	        		DB_Schema.GmeScenro.CHALLENGE + " text," +
+	        		DB_Schema.GmeScenro.RIGHT_ANSWER + " text," +
+	        		DB_Schema.GmeScenro.ANSWER1 + " text," +
+	        		DB_Schema.GmeScenro.ANSWER2 + " text," +
+	        		DB_Schema.GmeScenro.ANSWER3 + " text," +
 	        		DB_Schema.GmeScenro.NEXT_CHECKPOINT_LAT + " real," +
 	        		DB_Schema.GmeScenro.NEXT_CHECKPOINT_LONG + " real" +
 	        		");"
@@ -89,57 +108,71 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 		onCreate(db);
 	}
 	
-	public void addChallenge(Challenge challenge){
+	public long addChallenge(Challenge challenge){
 		SQLiteDatabase db;
-		db = this.getWritableDatabase();
 		ContentValues values = new ContentValues();
 		values.put(DB_Schema.GmeScenro.CHECKPOINT_LAT, challenge.getCheckpoint().latitude);
 		values.put(DB_Schema.GmeScenro.CHECKPOINT_LONG, challenge.getCheckpoint().longitude);
 		values.put(DB_Schema.GmeScenro.NEXT_CHECKPOINT_LAT, challenge.getNext_checkpoint().latitude);
-		values.put(DB_Schema.GmeScenro.NEXT_CHECKPOINT_LAT, challenge.getNext_checkpoint().longitude);
+		values.put(DB_Schema.GmeScenro.NEXT_CHECKPOINT_LONG, challenge.getNext_checkpoint().longitude);
 		values.put(DB_Schema.GmeScenro.CHALLENGE, challenge.getChallenge());
-		values.put(DB_Schema.GmeScenro.ANSWER1, challenge.getWrong_answers()[0]);
-		values.put(DB_Schema.GmeScenro.ANSWER2, challenge.getWrong_answers()[1]);
-		values.put(DB_Schema.GmeScenro.ANSWER3, challenge.getWrong_answers()[2]);
+		values.put(DB_Schema.GmeScenro.ANSWER1, challenge.getWrong_answers(0));
+		values.put(DB_Schema.GmeScenro.ANSWER2, challenge.getWrong_answers(1));
+		values.put(DB_Schema.GmeScenro.ANSWER3, challenge.getWrong_answers(2));
 		values.put(DB_Schema.GmeScenro.RIGHT_ANSWER, challenge.getRight_answer());
 		
 		//inserting row
-		db.insert(DB_Schema.GmeScenro.TABLE_NAME, null, values);
+		db = this.getWritableDatabase();
+		long r_id = db.insert(DB_Schema.GmeScenro.TABLE_NAME, null, values);
 		db.close(); // closing db connection
+		return r_id;
 	}
 	
-	public Cursor getChallenge(int index){
+	public Challenge getChallenge(long id){
 		SQLiteDatabase db;
 		db = this.getReadableDatabase();
-		String[] projection = {
-				DB_Schema.GmeScenro._ID,
-				DB_Schema.GmeScenro.CHECKPOINT_LAT,
-				DB_Schema.GmeScenro.CHECKPOINT_LONG,
-				DB_Schema.GmeScenro.CHALLENGE,
-				DB_Schema.GmeScenro.RIGHT_ANSWER,
-				DB_Schema.GmeScenro.ANSWER1,
-				DB_Schema.GmeScenro.ANSWER2,
-				DB_Schema.GmeScenro.ANSWER3,
-				DB_Schema.GmeScenro.NEXT_CHECKPOINT_LAT,
-				DB_Schema.GmeScenro.NEXT_CHECKPOINT_LONG
-		};
-		Cursor c = db.query(true,
+		Cursor c = db.query(
 				DB_Schema.GmeScenro.TABLE_NAME,
-				projection, DB_Schema.GmeScenro._ID + "=" + index,
-				null, null, null, null, null);
-		db.close();
+				projection_game, DB_Schema.GmeScenro._ID + "=?",
+					new String[] { String.valueOf(id) },
+					null, null, null);
+		
 		if (c != null)
-			c.moveToFirst();
-		return c;
+			if (c.moveToFirst())
+				Log.d("cursor ","C is true");
+		db.close();
+		c.close();
+		return curToChallenge(c);
 	}
 
-	public Cursor getEntireGame(){
+	private Challenge curToChallenge(Cursor c) {
+		// TODO Auto-generated method stub
+		Challenge challenge = new Challenge();
+		challenge.setChallenge(c.getString(3));
+		challenge.setWrong_answers(new String [] {c.getString(5), c.getString(6), c.getString(7)});
+		challenge.setRight_answer(c.getString(8));
+		challenge.setCheckpoint( new LatLng(c.getDouble(1), c.getDouble(2)));
+		challenge.setNext_checkpoint( new LatLng(c.getDouble(8), c.getDouble(9)));
+		challenge.setRight_answer(c.getString(4));
+		return challenge;
+	}
+
+	public List<Challenge> getEntireGame(){
+		List<Challenge> list = new ArrayList<Challenge>();
 		SQLiteDatabase db = this.getReadableDatabase();
-	Cursor c = db.query(true,
+	Cursor c = db.query(
 			DB_Schema.GmeScenro.TABLE_NAME,
-			null, null,
-			null, null, null, null, null);
-		return c;
+			projection_game, null,
+			null, null, null, null);
+		c.moveToFirst();
+		while(!c.isAfterLast()){
+			Challenge challenge = curToChallenge(c);
+			list.add(challenge);
+			c.moveToNext();
+		}
+		c.close();
+		db.close();
+		return list;
 		
 	}
 }

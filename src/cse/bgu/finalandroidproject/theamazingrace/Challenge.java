@@ -25,6 +25,11 @@ public class Challenge {
 		this.wrong_answers = wrong_answers;
 	}
 
+
+	public Challenge() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public LatLng getCheckpoint() {
 		return checkpoint;
 	}
@@ -49,8 +54,8 @@ public class Challenge {
 	public void setRight_answer(String right_answer) {
 		this.right_answer = right_answer;
 	}
-	public String[] getWrong_answers() {
-		return wrong_answers;
+	public String getWrong_answers(int i) {
+		return wrong_answers[i];
 	}
 	public void setWrong_answers(String[] wrong_answers) {
 		this.wrong_answers = wrong_answers;

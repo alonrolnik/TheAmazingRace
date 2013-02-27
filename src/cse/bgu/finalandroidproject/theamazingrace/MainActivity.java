@@ -1,7 +1,8 @@
 package cse.bgu.finalandroidproject.theamazingrace;
 
+import java.util.List;
+
 import android.app.Activity;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -22,14 +23,11 @@ public class MainActivity extends Activity {
 		MySQLiteOpenHelper db = new MySQLiteOpenHelper(this);
 		// inserting
 		Log.d("insert: ", "Inserting ...");
-		db.addChallenge(challenge1);
+		long id = db.addChallenge(challenge1);
 		
 		// reading
 		Log.d("reading: ", "Reading all challenges ...");
-		Cursor mCursor = db.getEntireGame();
-		if (mCursor == null)
-			Log.d("mCursor: ", "Null");
-		
+		List<Challenge> list = db.getEntireGame();		
 	}
 
 	@Override
