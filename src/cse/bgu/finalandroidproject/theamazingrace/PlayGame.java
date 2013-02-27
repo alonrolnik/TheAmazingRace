@@ -60,7 +60,7 @@ public class PlayGame extends android.support.v4.app.FragmentActivity
     private boolean mGeocoderAvailable;
     private boolean mUseFine;
     private boolean mUseBoth;
-
+    
     // Keys for maintaining UI states after rotation.
     private static final String KEY_FINE = "use_fine";
     private static final String KEY_BOTH = "use_both";

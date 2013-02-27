@@ -66,7 +66,7 @@ public class Server_Interface {
 	 * upload new game to the server
 	 * @param game
 	 */
-	public void create_new_game(Game game){
+	public void create_new_game(Challenge game){
 		
 	}
 	
@@ -82,7 +82,7 @@ public class Server_Interface {
 	 * update existing game
 	 * @param game
 	 */
-	public void update_game(Game game){
+	public void update_game(Challenge game){
 		
 	}
 	

@@ -1,8 +1,12 @@
 package cse.bgu.finalandroidproject.theamazingrace;
 
-import android.os.Bundle;
 import android.app.Activity;
+import android.database.Cursor;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
+
+import com.google.android.gms.maps.model.LatLng;
 
 public class MainActivity extends Activity {
 
@@ -10,6 +14,22 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		Challenge challenge1 = new Challenge(new LatLng(30, 34), new LatLng(31, 34), "hello whats my name",
+				"Alon",
+				new String[] {"Tal", "Oscar", "Gil"}
+				);
+		MySQLiteOpenHelper db = new MySQLiteOpenHelper(this);
+		// inserting
+		Log.d("insert: ", "Inserting ...");
+		db.addChallenge(challenge1);
+		
+		// reading
+		Log.d("reading: ", "Reading all challenges ...");
+		Cursor mCursor = db.getEntireGame();
+		if (mCursor == null)
+			Log.d("mCursor: ", "Null");
+		
 	}
 
 	@Override
@@ -18,5 +38,7 @@ public class MainActivity extends Activity {
 		getMenuInflater().inflate(R.menu.activity_main, menu);
 		return true;
 	}
+	
+	
 
 }

@@ -9,7 +9,7 @@ public class DB_Schema {
 	 */
 	private DB_Schema() {}
 
-	public static final String dbName = "myDB";
+	public static final String dbName = "myDB.db";
 	public static abstract class UserDetails implements BaseColumns{
 
 	    public static final String TABLE_NAME = "user_details";
@@ -38,14 +38,16 @@ public class DB_Schema {
 	}	    
 	public static abstract class GmeScenro implements BaseColumns{
 
-	    public static final String TABLE_NAME = "game_scenario";
-	    public static final String CHECKPOINT = "checkpoint";
+	    public static final String TABLE_NAME = "gamescenario";
+	    public static final String CHECKPOINT_LAT = "checkpointlat";
+	    public static final String CHECKPOINT_LONG = "checkpointlong";
 	    public static final String CHALLENGE = "challenge";
-	    public static final String RIGHT_ANSWER = "right_answer";	
+	    public static final String RIGHT_ANSWER = "rightanswer";	
 	    public static final String ANSWER1 = "answer1";
 	    public static final String ANSWER2 = "answer2";
 	    public static final String ANSWER3 = "answer3";
-	    public static final String NEXT_CHECKPOINT = "next_checkpoint";
+	    public static final String NEXT_CHECKPOINT_LAT = "nextcheckpointlat";
+	    public static final String NEXT_CHECKPOINT_LONG = "nextcheckpointlong";
 	    
 	}	    
 
