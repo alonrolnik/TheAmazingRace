@@ -2,8 +2,6 @@ package cse.bgu.finalandroidproject.theamazingrace;
 
 import java.io.IOException;
 import java.security.SecureRandom;
-import java.util.ArrayList;
-import java.util.FormatterClosedException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -15,7 +13,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.Loader.ForceLoadContentObserver;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
@@ -30,16 +27,17 @@ import android.os.Message;
 import android.os.SystemClock;
 import android.provider.Settings;
 import android.support.v4.app.DialogFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
@@ -106,12 +104,13 @@ public class PlayGame extends android.support.v4.app.FragmentActivity
     private int counter = 0;
     private boolean flag = false;
     
-    Challenge newChallenge[] = {new Challenge (new LatLng(30, 34), "Whats my name?", "Alon", new String[] {"Tal", "Oscar", "Gil"}),
+/*    Challenge newChallenge[] = {new Challenge (new LatLng(30, 34), "Whats my name?", "Alon", new String[] {"Tal", "Oscar", "Gil"}),
     							new Challenge (new LatLng(30, 34), "What is the color of Napolion's white horse?", "White", new String[] {"Black", "Red", "Blue"}), 
     							new Challenge (new LatLng(30, 34), "How meny meters are in one nautical mile?", "1852", new String[] {"1609", "1734", "1586"}),
     							new Challenge (new LatLng(30, 34), "Where are we?", "All the answers are correct", new String[] {"bilding 95", "lab 105", "B.G.U"})}; 
-    
-    List<Challenge> myList = new ArrayList<Challenge>();
+*/    
+    MySQLiteOpenHelper db = new MySQLiteOpenHelper(this);
+    List<Challenge> myList;
     Iterator<Challenge> myIterator=null;
     
     
@@ -122,6 +121,7 @@ public class PlayGame extends android.support.v4.app.FragmentActivity
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_play_game);
+		myList = db.getEntireGame();
         mTapTextView = (TextView) findViewById(R.id.tap_text);
         mCameraTextView = (TextView) findViewById(R.id.camera_text);
         checkMyLocation = (Button) findViewById(R.id.checkMyLocation);
@@ -167,13 +167,13 @@ public class PlayGame extends android.support.v4.app.FragmentActivity
         mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         
-        // loading the first challenge
+/*        // loading the first challenge
         //////////////////////////////////////////////////////////////////
         myList.add(newChallenge[0]);
         myList.add(newChallenge[1]);
         myList.add(newChallenge[2]);
         myList.add(newChallenge[3]);
-        
+*/        
         //Challenge curChallenge = myList.iterator().next();
         if (myIterator==null) 
 			myIterator = myList.iterator();
@@ -572,16 +572,35 @@ public class PlayGame extends android.support.v4.app.FragmentActivity
     }
     
     private boolean checkArea() {
-    /*	Location myLocation = null;
-    	double distance = 0;
-    	myLocation = new Location (requestUpdatesFromProvider(
-                LocationManager.GPS_PROVIDER, R.string.not_support_gps));
+    	Location myLocation = new Location("myLoc");
+    	double distance = 0;        
+        Location gpsLocation = requestUpdatesFromProvider(
+                LocationManager.GPS_PROVIDER, R.string.not_support_gps);
+        Location networkLocation = requestUpdatesFromProvider(
+                LocationManager.NETWORK_PROVIDER, R.string.not_support_network);
+
+        // If both providers return last known locations, compare the two and use the better
+        // one to update the UI.  If only one provider returns a location, use it.
+        if (gpsLocation != null && networkLocation != null) {
+            myLocation=getBetterLocation(gpsLocation, networkLocation);
+        } else if (gpsLocation != null) {
+            myLocation=gpsLocation;
+        } else if (networkLocation != null) {
+            myLocation=networkLocation;
+        } else{
+        	myLocation.setLatitude(0.0);
+        	myLocation.setLongitude(0.0);
+        }
+
+
+    	if(myLocation==null)
+    		Log.d("myLocationis:", "null");
     	
     	distance = myLocation.distanceTo(currntPoint);
-    	if (distance < THRESHOLD)*/
+    	if (distance < THRESHOLD)
     		return true;
-    	/*else
-    		return false;*/
+    	else
+    		return false;
 	}
 
 	@Override
@@ -632,7 +651,9 @@ public class PlayGame extends android.support.v4.app.FragmentActivity
         flag = true;
         
     	currntPoint.setLatitude(curruntChallenge.getCheckpoint().latitude);
-    	currntPoint.setLongitude(curruntChallenge.getCheckpoint().longitude);        	
+    	currntPoint.setLongitude(curruntChallenge.getCheckpoint().longitude);
+        mMap.addMarker(new MarkerOptions().position(new LatLng(currntPoint.getLatitude(), currntPoint.getLongitude())).title("Your destination"));	
+        mMap.moveCamera(CameraUpdateFactory.zoomIn());
 	}
 
 	public void nextPoint() {
@@ -641,7 +662,6 @@ public class PlayGame extends android.support.v4.app.FragmentActivity
 			if (myIterator==null) 
 				myIterator = myList.iterator();
 	        suffleAnswers(myIterator.next());
-	        //mMap.addMarker(new MarkerOptions().position(new LatLng(currntPoint.getLatitude(), currntPoint.getLongitude())).title("Your destination"));	
 		}
 			
 		else {
@@ -664,10 +684,12 @@ public class PlayGame extends android.support.v4.app.FragmentActivity
 	
 	public String calcTime() {
 		int elapsedMillis = (int)((SystemClock.elapsedRealtime() - gTimer.getBase())/1000);
-		int sec = elapsedMillis%60;
-		int min = (elapsedMillis/60)%60;
+		int sec = (elapsedMillis%60)%10;
+		int tenSec = (elapsedMillis%60)/10;
+		int min = ((elapsedMillis/60)%60)%10;
+		int tenMin = ((elapsedMillis/60)%60)/10;
 		int hr = elapsedMillis/3600;
-		String ans = hr + ":" + min + ":" +sec;
+		String ans = hr + ":" + tenMin + min + ":" + tenSec + sec;
 		return ans;
 		
 	}

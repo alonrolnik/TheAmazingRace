@@ -144,7 +144,6 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 		Challenge challenge = new Challenge();
 		challenge.setChallenge(c.getString(3));
 		challenge.setWrong_answers(new String [] {c.getString(5), c.getString(6), c.getString(7)});
-		challenge.setRight_answer(c.getString(8));
 		challenge.setCheckpoint( new LatLng(c.getDouble(1), c.getDouble(2)));
 		challenge.setRight_answer(c.getString(4));
 		return challenge;
