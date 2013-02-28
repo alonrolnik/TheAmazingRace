@@ -90,7 +90,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:onClick="checkMyLocation"
-            android:text="@string/check_my_location" />
+            android:text="check_my_location" />
 
     </LinearLayout>
 

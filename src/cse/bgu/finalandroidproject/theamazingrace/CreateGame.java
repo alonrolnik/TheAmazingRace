@@ -1,8 +1,6 @@
 package cse.bgu.finalandroidproject.theamazingrace;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
@@ -27,6 +25,7 @@ import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
+import android.view.WindowManager.LayoutParams;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.PopupWindow;
@@ -40,7 +39,6 @@ import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 
 
@@ -87,10 +85,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 		@Override
 		protected void onCreate(Bundle savedInstanceState) {
 			super.onCreate(savedInstanceState);
-			setContentView(R.layout.activity_play_game);
+			setContentView(R.layout.activity_create_game);
 	        mTapTextView = (TextView) findViewById(R.id.tap_text);
 	        mCameraTextView = (TextView) findViewById(R.id.camera_text);
-	        getMyLocation = (Button) findViewById(R.id.getMyLocation);
+	        getMyLocation = (Button) findViewById(R.id.get_my_loc);
 			setUpMapIfNeeded();
 
 			
@@ -520,7 +518,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 		LayoutInflater layoutInflater = (LayoutInflater)getBaseContext().
 				getSystemService(LAYOUT_INFLATER_SERVICE);  
 		View popupView = layoutInflater.inflate(R.layout.fill_in_challenge, null);  
-		final PopupWindow popupWindow = new PopupWindow(popupView, 500/*LayoutParams.WRAP_CONTENT*/, 800/*LayoutParams.WRAP_CONTENT*/); 
+		final PopupWindow popupWindow = new PopupWindow(popupView,LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT); 
 
 		//setContentView(R.layout.fill_in_challenge);
 		TextView header = (TextView) popupView.findViewById(R.id.headerForCreate);

@@ -40,8 +40,8 @@
         android:id="@+id/label_address"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/getMyLocation"
-        android:layout_alignLeft="@+id/getMyLocation"
+        android:layout_above="@+id/get_my_Loc"
+        android:layout_alignLeft="@+id/get_my_location"
         android:text="@string/address"
         android:textSize="22sp" />
 
@@ -54,14 +54,6 @@
         android:text="@string/latlng"
         android:textSize="22sp" />
 
-    <Button
-        android:id="@+id/getMyLocation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/map"
-        android:onClick="getMyLocation"
-        android:text="Get my location" />
-
     <TextView
         android:id="@+id/address"
         android:layout_width="match_parent"
@@ -70,13 +62,13 @@
         android:layout_alignLeft="@+id/label_latlng"
         android:textSize="20sp" />
 
-    <TextView
-        android:id="@+id/tap_text"
-        android:layout_width="match_parent"
+    <Button
+        android:id="@+id/get_my_loc"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:text="tap long on the map to add challenge" />
+        android:layout_above="@+id/map"
+        android:layout_centerHorizontal="true"
+        android:text="Button" />
 
     <TextView
         android:id="@+id/camera_text"
@@ -84,7 +76,16 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/linearLayout2"
         android:layout_below="@+id/linearLayout2"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="53dp"
         android:text="@string/move_the_camera" />
+
+    <TextView
+        android:id="@+id/tap_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/camera_text"
+        android:layout_alignLeft="@+id/camera_text"
+        android:layout_marginBottom="22dp"
+        android:text="tap long on the map to add challenge" />
 
 </RelativeLayout>
