@@ -35,10 +35,10 @@ public class MainActivity extends Activity {
 	}
 	
 	public void initTest(){
-	    Challenge newChallenge[] = {new Challenge (new LatLng(30, 34), "Whats my name?", "Alon", new String[] {"Tal", "Oscar", "Gil"}),
-				new Challenge (new LatLng(30, 34), "What is the color of Napolion's white horse?", "White", new String[] {"Black", "Red", "Blue"}), 
-				new Challenge (new LatLng(30, 34), "How meny meters are in one nautical mile?", "1852", new String[] {"1609", "1734", "1586"}),
-				new Challenge (new LatLng(30, 34), "Where are we?", "All the answers are correct", new String[] {"bilding 95", "lab 105", "B.G.U"})};
+	    Challenge newChallenge[] = {new Challenge (new LatLng(31.25, 34.85), "Whats my name?", "Alon", new String[] {"Tal", "Oscar", "Gil"}),
+				new Challenge (new LatLng(31.15, 34.75), "What is the color of Napolion's white horse?", "White", new String[] {"Black", "Red", "Blue"}), 
+				new Challenge (new LatLng(31.2, 34.8), "How meny meters are in one nautical mile?", "1852", new String[] {"1609", "1734", "1586"}),
+				new Challenge (new LatLng(31.3, 34.9), "Where are we?", "All the answers are correct", new String[] {"bilding 95", "lab 105", "B.G.U"})};
 	    for (int i = 0; i < newChallenge.length; i++) {
 			db.addChallenge(newChallenge[i]);
 		}

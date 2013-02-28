@@ -82,7 +82,7 @@ public class PlayGame extends android.support.v4.app.FragmentActivity
     private static final int TEN_SECONDS = 10000;
     private static final int TEN_METERS = 10;
     private static final int TWO_MINUTES = 1000 * 60 * 2;
-	private static final int THRESHOLD = 10;
+	private static final int THRESHOLD = 100000;
     
     
     // mission variables
@@ -511,7 +511,6 @@ public class PlayGame extends android.support.v4.app.FragmentActivity
      * This should only be called once and when we are sure that {@link #mMap} is not null.
      */
     private void setUpMap() {
-        mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
         mMap.setOnMapClickListener(this);
         mMap.setOnMapLongClickListener(this);
         mMap.setOnCameraChangeListener(this);
@@ -653,7 +652,8 @@ public class PlayGame extends android.support.v4.app.FragmentActivity
     	currntPoint.setLatitude(curruntChallenge.getCheckpoint().latitude);
     	currntPoint.setLongitude(curruntChallenge.getCheckpoint().longitude);
         mMap.addMarker(new MarkerOptions().position(new LatLng(currntPoint.getLatitude(), currntPoint.getLongitude())).title("Your destination"));	
-        mMap.moveCamera(CameraUpdateFactory.zoomIn());
+        mMap.moveCamera(
+                CameraUpdateFactory.newLatLngZoom(new LatLng(currntPoint.getLatitude(), currntPoint.getLongitude()), 14));
 	}
 
 	public void nextPoint() {
