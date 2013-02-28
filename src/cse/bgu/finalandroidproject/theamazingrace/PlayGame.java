@@ -3,6 +3,7 @@ package cse.bgu.finalandroidproject.theamazingrace;
 import java.io.IOException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.FormatterClosedException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -14,6 +15,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.Loader.ForceLoadContentObserver;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -24,12 +27,15 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.SystemClock;
 import android.provider.Settings;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.Chronometer;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -53,6 +59,10 @@ public class PlayGame extends android.support.v4.app.FragmentActivity
     private TextView mTapTextView;
     private TextView mCameraTextView;
     private Button checkMyLocation;
+    private TextView tScore;
+    private TextView eScore;
+    private TextView eTime;
+    private Chronometer gTimer;
     // UI handler codes.
     private TextView mLatLng;
     private TextView mAddress;
@@ -80,8 +90,7 @@ public class PlayGame extends android.support.v4.app.FragmentActivity
     // mission variables
     private String question;
     private String answers[] = new String[4];
-    private Location currntPoint;
-    private Location nextPoint;
+    private Location currntPoint = new Location("currntPoint");
     private int score = 0;
     
     //new *****************************************************
@@ -93,14 +102,14 @@ public class PlayGame extends android.support.v4.app.FragmentActivity
     private TextView dScore;
     private TextView dQuestion;
     private int answersStatus[] = {3, 3, 3, 3};
-    private int bonus[] = {10, 5,  2,  1};
+    private int bonus[] = {10, 5,  2,  0};
     private int counter = 0;
     private boolean flag = false;
     
-    Challenge newChallenge[] = {new Challenge (new LatLng(30, 34), new LatLng(31, 34), "Hello whats my name?", "Alon", new String[] {"Tal", "Oscar", "Gil"}),
-    							new Challenge (new LatLng(30, 34), new LatLng(31, 34), "What is the color of Napolion's white horse?", "White", new String[] {"Black", "Red", "Blue"}), 
-    							new Challenge (new LatLng(30, 34), new LatLng(31, 34), "How meny meters are in one navel mile?", "1852", new String[] {"1609", "1734", "1586"}),
-    							new Challenge (new LatLng(30, 34), new LatLng(0.0, 0.0), "Where are we?", "All the answers are correct", new String[] {"bilding 95", "lab 105", "B.G.U"})}; 
+    Challenge newChallenge[] = {new Challenge (new LatLng(30, 34), "Whats my name?", "Alon", new String[] {"Tal", "Oscar", "Gil"}),
+    							new Challenge (new LatLng(30, 34), "What is the color of Napolion's white horse?", "White", new String[] {"Black", "Red", "Blue"}), 
+    							new Challenge (new LatLng(30, 34), "How meny meters are in one nautical mile?", "1852", new String[] {"1609", "1734", "1586"}),
+    							new Challenge (new LatLng(30, 34), "Where are we?", "All the answers are correct", new String[] {"bilding 95", "lab 105", "B.G.U"})}; 
     
     List<Challenge> myList = new ArrayList<Challenge>();
     Iterator<Challenge> myIterator=null;
@@ -115,7 +124,9 @@ public class PlayGame extends android.support.v4.app.FragmentActivity
 		setContentView(R.layout.activity_play_game);
         mTapTextView = (TextView) findViewById(R.id.tap_text);
         mCameraTextView = (TextView) findViewById(R.id.camera_text);
-        checkMyLocation = (Button) findViewById(R.id.button1);
+        checkMyLocation = (Button) findViewById(R.id.getMyLocation);
+        tScore = (TextView) findViewById(R.id.label_score);
+        gTimer = (Chronometer) findViewById(R.id.chronometer1);
 		setUpMapIfNeeded();
 
 		
@@ -166,6 +177,8 @@ public class PlayGame extends android.support.v4.app.FragmentActivity
         //Challenge curChallenge = myList.iterator().next();
         if (myIterator==null) 
 			myIterator = myList.iterator();
+        gTimer.setBase(SystemClock.elapsedRealtime());
+        gTimer.start();
 		
         suffleAnswers(myIterator.next());
         
@@ -536,111 +549,14 @@ public class PlayGame extends android.support.v4.app.FragmentActivity
     			dScore.setText("Your current score is: " + score);
 
     			popupWindow.showAsDropDown(checkMyLocation, 100, 100 );
-
-
-
-    			bAnswer1.setOnClickListener(new View.OnClickListener() {
-
-    				@Override
-    				public void onClick(View v) {
-    					// TODO Auto-generated method stub
-    					if (answersStatus[0] == 0) {
-    						counter++;
-    						answersStatus[0] = 1;
-    						dQuestion.setText("Wrong answer! Please try again. The question is: " + question);	
-    					}
-    					else if (answersStatus[0] == 1){
-    						dQuestion.setText("You already tried this answer! Please try again. The question is: " + question);
-    					}
-    					else if (answersStatus[0] == 2){
-    						dQuestion.setText("Correct! You won " + bonus[counter] + " points! Now lets continue to the next checkpoint...");
-    						score = score + bonus[counter];
-    						dScore.setText("Your current score is: " + score + " points!");
-    						counter = 0;
-    						resetAnswer();
-    					}
-    				}
-    			});
-
-    			bAnswer2.setOnClickListener(new View.OnClickListener() {
-
-    				@Override
-    				public void onClick(View v) {
-    					// TODO Auto-generated method stub
-    					if (answersStatus[1] == 0) {
-    						counter++;
-    						answersStatus[1] = 1;
-    						dQuestion.setText("Wrong answer! Please try again. The question is: " + question);	
-    					}
-    					else if (answersStatus[1] == 1){
-    						dQuestion.setText("You already tried this answer! Please try again. The question is: " + question);
-    					}
-    					else if (answersStatus[1] == 2){
-    						dQuestion.setText("Correct! You won " + bonus[counter] + " points! Now lets continue to the next checkpoint...");
-    						score = score + bonus[counter];
-    						dScore.setText("Your current score is: " + score + " points!");
-    						counter = 0;
-    						resetAnswer();
-    					}
-    				}
-    			});
-
-    			bAnswer3.setOnClickListener(new View.OnClickListener() {
-
-    				@Override
-    				public void onClick(View v) {
-    					// TODO Auto-generated method stub
-    					if (answersStatus[2] == 0) {
-    						counter++;
-    						answersStatus[2] = 1;
-    						dQuestion.setText("Wrong answer! Please try again. The question is: " + question);	
-    					}
-    					else if (answersStatus[2] == 1){
-    						dQuestion.setText("You already tried this answer! Please try again. The question is: " + question);
-    					}
-    					else if (answersStatus[2] == 2){
-    						dQuestion.setText("Correct! You won " + bonus[counter] + " points! Now lets continue to the next checkpoint...");
-    						score = score + bonus[counter];
-    						dScore.setText("Your current score is: " + score + " points!");
-    						counter = 0;
-    						resetAnswer();
-    					}
-    				}
-    			});
-
-    			bAnswer4.setOnClickListener(new View.OnClickListener() {
-
-    				@Override
-    				public void onClick(View v) {
-    					// TODO Auto-generated method stub
-    					if (answersStatus[3] == 0) {
-    						counter++;
-    						answersStatus[3] = 1;
-    						dQuestion.setText("Wrong answer! Please try again. The question is: " + question);	
-    					}
-    					else if (answersStatus[3] == 1){
-    						dQuestion.setText("You already tried this answer! Please try again. The question is: " + question);
-    					}
-    					else if (answersStatus[3] == 2){
-    						dQuestion.setText("Correct! You won " + bonus[counter] + " points! Now lets continue to the next checkpoint...");
-    						score = score + bonus[counter];
-    						dScore.setText("Your current score is: " + score + " points!");
-    						counter = 0;
-    						resetAnswer();
-    					}
-    				}
-    			});
-
+    			
     			bContinue.setOnClickListener(new View.OnClickListener() {
 
     				@Override
     				public void onClick(View v) {
-    					// TODO Auto-generated method stub
     					if (answersStatus[0] == 3) {
-    						
     						popupWindow.dismiss();
     						nextPoint();
-    						
     					}
     					else {
     						dQuestion.setText("You haven't answered the question! The question is: " + question);
@@ -656,13 +572,8 @@ public class PlayGame extends android.support.v4.app.FragmentActivity
     }
     
     private boolean checkArea() {
-		// TODO Auto-generated method stub
     /*	Location myLocation = null;
     	double distance = 0;
-    	currntPoint = new Location (requestUpdatesFromProvider(
-                LocationManager.GPS_PROVIDER, R.string.not_support_gps));
-    	currntPoint.setLatitude(31.2632050);
-    	currntPoint.setLongitude(34.8027548);
     	myLocation = new Location (requestUpdatesFromProvider(
                 LocationManager.GPS_PROVIDER, R.string.not_support_gps));
     	
@@ -720,27 +631,78 @@ public class PlayGame extends android.support.v4.app.FragmentActivity
         }
         flag = true;
         
-        /*
-        currntPoint = new Location (requestUpdatesFromProvider(
-                LocationManager.GPS_PROVIDER, R.string.not_support_gps));
     	currntPoint.setLatitude(curruntChallenge.getCheckpoint().latitude);
-    	currntPoint.setLongitude(curruntChallenge.getCheckpoint().longitude);        
-        nextPoint = new Location (requestUpdatesFromProvider(
-                LocationManager.GPS_PROVIDER, R.string.not_support_gps));
-    	nextPoint.setLatitude(curruntChallenge.getNext_checkpoint().latitude);
-    	nextPoint.setLongitude(curruntChallenge.getNext_checkpoint().longitude);
-        	*/	
+    	currntPoint.setLongitude(curruntChallenge.getCheckpoint().longitude);        	
 	}
 
 	public void nextPoint() {
-		/*if ((nextPoint.getLatitude() == 0.0) && (nextPoint.getLongitude() == 0.0))
-			Toast.makeText(this, "Game Over!", Toast.LENGTH_LONG).show();
-		else {*/
+		tScore.setText("Your score: " + score);
+		if (myIterator.hasNext()) {
 			if (myIterator==null) 
 				myIterator = myList.iterator();
-			
 	        suffleAnswers(myIterator.next());
-		//}		
+	        //mMap.addMarker(new MarkerOptions().position(new LatLng(currntPoint.getLatitude(), currntPoint.getLongitude())).title("Your destination"));	
+		}
+			
+		else {
+			Toast.makeText(this, "Game Over!", Toast.LENGTH_LONG).show();
+			gTimer.stop();
+			String fTime = calcTime();
+			LayoutInflater layoutInflater = (LayoutInflater)getBaseContext().getSystemService(LAYOUT_INFLATER_SERVICE);  
+			View popupView = layoutInflater.inflate(R.layout.end_game, null);  
+			final PopupWindow popupWindow = new PopupWindow(popupView, 500/*LayoutParams.WRAP_CONTENT*/, 800/*LayoutParams.WRAP_CONTENT*/); 
+			eScore = (TextView) popupView.findViewById(R.id.endScore);
+			eTime = (TextView) popupView.findViewById(R.id.endTime);
+			eTime.setTextColor(Color.BLUE);
+			eScore.setTextColor(Color.CYAN);
+			eTime.setText("You finshed the game in: " + fTime);
+			eScore.setText("With score of: " + score);
+
+			popupWindow.showAsDropDown(checkMyLocation, 100, 100 );
+			}		
 	}
 	
+	public String calcTime() {
+		int elapsedMillis = (int)((SystemClock.elapsedRealtime() - gTimer.getBase())/1000);
+		int sec = elapsedMillis%60;
+		int min = (elapsedMillis/60)%60;
+		int hr = elapsedMillis/3600;
+		String ans = hr + ":" + min + ":" +sec;
+		return ans;
+		
+	}
+	
+	public void answerClick(View view) {
+		int ans;
+		switch (view.getId()) {
+		case R.id.radioButton1:
+			ans = 0;
+			break;
+		case R.id.radioButton2:
+			ans = 1;
+			break;
+		case R.id.radioButton3:
+			ans = 2;
+			break;
+		default:
+			ans = 3;
+			break;
+		}
+
+		if (answersStatus[ans] == 0) {
+			counter++;
+			answersStatus[ans] = 1;
+			dQuestion.setText("Wrong answer! Please try again. The question is: " + question);	
+		}
+		else if (answersStatus[ans] == 1){
+			dQuestion.setText("You already tried this answer! Please try again. The question is: " + question);
+		}
+		else if (answersStatus[ans] == 2){
+			dQuestion.setText("Correct! You won " + bonus[counter] + " points! Now lets continue to the next checkpoint...");
+			score = score + bonus[counter];
+			dScore.setText("Your current score is: " + score + " points!");
+			counter = 0;
+			resetAnswer();
+		}
+	}	
 }

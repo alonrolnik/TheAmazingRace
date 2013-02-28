@@ -24,8 +24,6 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 		DB_Schema.GmeScenro.ANSWER1,
 		DB_Schema.GmeScenro.ANSWER2,
 		DB_Schema.GmeScenro.ANSWER3,
-		DB_Schema.GmeScenro.NEXT_CHECKPOINT_LAT,
-		DB_Schema.GmeScenro.NEXT_CHECKPOINT_LONG
 };
  
 	//create helper object to manipulate database
@@ -93,9 +91,7 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 	        		DB_Schema.GmeScenro.RIGHT_ANSWER + " text," +
 	        		DB_Schema.GmeScenro.ANSWER1 + " text," +
 	        		DB_Schema.GmeScenro.ANSWER2 + " text," +
-	        		DB_Schema.GmeScenro.ANSWER3 + " text," +
-	        		DB_Schema.GmeScenro.NEXT_CHECKPOINT_LAT + " real," +
-	        		DB_Schema.GmeScenro.NEXT_CHECKPOINT_LONG + " real" +
+	        		DB_Schema.GmeScenro.ANSWER3 + " text" +
 	        		");"
 	        	);
 	}
@@ -113,8 +109,6 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 		ContentValues values = new ContentValues();
 		values.put(DB_Schema.GmeScenro.CHECKPOINT_LAT, challenge.getCheckpoint().latitude);
 		values.put(DB_Schema.GmeScenro.CHECKPOINT_LONG, challenge.getCheckpoint().longitude);
-		values.put(DB_Schema.GmeScenro.NEXT_CHECKPOINT_LAT, challenge.getNext_checkpoint().latitude);
-		values.put(DB_Schema.GmeScenro.NEXT_CHECKPOINT_LONG, challenge.getNext_checkpoint().longitude);
 		values.put(DB_Schema.GmeScenro.CHALLENGE, challenge.getChallenge());
 		values.put(DB_Schema.GmeScenro.ANSWER1, challenge.getWrong_answers(0));
 		values.put(DB_Schema.GmeScenro.ANSWER2, challenge.getWrong_answers(1));
@@ -152,7 +146,6 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 		challenge.setWrong_answers(new String [] {c.getString(5), c.getString(6), c.getString(7)});
 		challenge.setRight_answer(c.getString(8));
 		challenge.setCheckpoint( new LatLng(c.getDouble(1), c.getDouble(2)));
-		challenge.setNext_checkpoint( new LatLng(c.getDouble(8), c.getDouble(9)));
 		challenge.setRight_answer(c.getString(4));
 		return challenge;
 	}

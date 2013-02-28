@@ -10,16 +10,14 @@ import com.google.android.gms.maps.model.LatLng;
 public class Challenge {
 	private static final int NUM_OF_ANSWERS = 3;
 	private LatLng checkpoint;
-	private LatLng next_checkpoint;
 	private String challenge;
 	private String right_answer;
 	private String [] wrong_answers = new String[NUM_OF_ANSWERS];
 
-	public Challenge(LatLng checkpoint, LatLng next_checkpoint, String challenge,
+	public Challenge(LatLng checkpoint, String challenge,
 			String right_answer, String[] wrong_answers) {
 		super();
 		this.checkpoint = checkpoint;
-		this.next_checkpoint = next_checkpoint;
 		this.challenge = challenge;
 		this.right_answer = right_answer;
 		this.wrong_answers = wrong_answers;
@@ -35,12 +33,6 @@ public class Challenge {
 	}
 	public void setCheckpoint(LatLng checkpoint) {
 		this.checkpoint = checkpoint;
-	}
-	public LatLng getNext_checkpoint() {
-		return next_checkpoint;
-	}
-	public void setNext_checkpoint(LatLng next_checkpoint) {
-		this.next_checkpoint = next_checkpoint;
 	}
 	public String getChallenge() {
 		return challenge;
