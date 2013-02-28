@@ -27,13 +27,14 @@ int drawable the_amazing_race 0x7f020009
 int id LinearLayout1 0x7f040011
 int id PlayGame 0x7f04000f
 int id RelativeLayout1 0x7f04001c
-int id action_settings 0x7f04002d
+int id action_settings 0x7f04002e
 int id address 0x7f04000b
 int id back 0x7f04001f
-int id button1 0x7f040015
 int id camera_text 0x7f04000d
 int id challenge 0x7f040025
+int id checkMyLocation 0x7f040015
 int id chronometer1 0x7f040014
+int id cont 0x7f04002c
 int id correctAns 0x7f040021
 int id create 0x7f040010
 int id done 0x7f040020
@@ -51,7 +52,7 @@ int id latlng 0x7f040005
 int id linearLayout1 0x7f040004
 int id linearLayout2 0x7f040006
 int id map 0x7f040007
-int id menu_settings 0x7f04002c
+int id menu_settings 0x7f04002d
 int id none 0x7f040000
 int id normal 0x7f040001
 int id popuplayout 0x7f040018

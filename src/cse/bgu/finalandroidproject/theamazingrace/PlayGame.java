@@ -124,7 +124,7 @@ public class PlayGame extends android.support.v4.app.FragmentActivity
 		setContentView(R.layout.activity_play_game);
         mTapTextView = (TextView) findViewById(R.id.tap_text);
         mCameraTextView = (TextView) findViewById(R.id.camera_text);
-        checkMyLocation = (Button) findViewById(R.id.getMyLocation);
+        checkMyLocation = (Button) findViewById(R.id.checkMyLocation);
         tScore = (TextView) findViewById(R.id.label_score);
         gTimer = (Chronometer) findViewById(R.id.chronometer1);
 		setUpMapIfNeeded();
@@ -538,7 +538,7 @@ public class PlayGame extends android.support.v4.app.FragmentActivity
     			bAnswer2 = (Button) popupView.findViewById(R.id.radioButton2);
     			bAnswer3 = (Button) popupView.findViewById(R.id.radioButton3);
     			bAnswer4 = (Button) popupView.findViewById(R.id.radioButton4);
-    			bContinue = (Button) popupView.findViewById(R.id.button1);
+    			bContinue = (Button) popupView.findViewById(R.id.cont);
     			dScore = (TextView) popupView.findViewById(R.id.score);
     			dQuestion = (TextView) popupView.findViewById(R.id.question);
     			bAnswer1.setText(answers[0]);

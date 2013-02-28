@@ -153,13 +153,14 @@ containing a value of this type.
         public static final int LinearLayout1=0x7f040011;
         public static final int PlayGame=0x7f04000f;
         public static final int RelativeLayout1=0x7f04001c;
-        public static final int action_settings=0x7f04002d;
+        public static final int action_settings=0x7f04002e;
         public static final int address=0x7f04000b;
         public static final int back=0x7f04001f;
-        public static final int button1=0x7f040015;
         public static final int camera_text=0x7f04000d;
         public static final int challenge=0x7f040025;
+        public static final int checkMyLocation=0x7f040015;
         public static final int chronometer1=0x7f040014;
+        public static final int cont=0x7f04002c;
         public static final int correctAns=0x7f040021;
         public static final int create=0x7f040010;
         public static final int done=0x7f040020;
@@ -177,7 +178,7 @@ containing a value of this type.
         public static final int linearLayout1=0x7f040004;
         public static final int linearLayout2=0x7f040006;
         public static final int map=0x7f040007;
-        public static final int menu_settings=0x7f04002c;
+        public static final int menu_settings=0x7f04002d;
         public static final int none=0x7f040000;
         public static final int normal=0x7f040001;
         public static final int popuplayout=0x7f040018;

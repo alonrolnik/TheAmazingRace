@@ -25,6 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@android:color/white"
+        android:onClick="answerClick"
         />
 
     <LinearLayout
@@ -36,6 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/white"
+            android:onClick="answerClick"
             />
     </LinearLayout>
 
@@ -50,6 +52,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/white"
+            android:onClick="answerClick"
              />
 
     </LinearLayout>
@@ -59,10 +62,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@android:color/white"
+        android:onClick="answerClick"
          />
 
     <Button
-        android:id="@+id/getMyLocation"
+        android:id="@+id/cont"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Continue" />

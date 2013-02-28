@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/popuplayout"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:alpha="0.8"
+    android:background="@drawable/game_over"
+    android:gravity="end"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/endTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true" 
+		android:layout_marginLeft="25dp"
+        android:layout_marginTop="30dp"/>
+
+    <Button
+        android:id="@+id/endButton1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="34dp"
+        android:layout_toRightOf="@+id/endTime" />
+
+    <TextView
+        android:id="@+id/endScore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:text="Back"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="20dp"/>
+
+</RelativeLayout>
