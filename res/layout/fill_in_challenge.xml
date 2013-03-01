@@ -2,42 +2,16 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/RelativeLayout1"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
-
-    <TextView
-        android:id="@+id/headerForCreate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignRight="@+id/editText1"
-        android:layout_marginRight="22dp"
-        android:layout_marginTop="28dp"
-        android:text="Challenge for ___ Address"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <Button
-        android:id="@+id/back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:text="Back" />
-
-    <Button
-        android:id="@+id/done"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/back"
-        android:layout_centerHorizontal="true"
-        android:text="Done!" />
+    android:layout_height="match_parent"
+    android:alpha="1"
+    android:background="@android:color/white" >
 
     <LinearLayout
         android:id="@+id/linearLayout1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/done"
+        android:layout_below="@+id/challenge"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="40dp"
         android:orientation="vertical" >
 
         <EditText
@@ -51,37 +25,93 @@
             android:id="@+id/wrongAns1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Answer 1"
+            android:hint="Wrong answer 1"
             android:inputType="textMultiLine" />
 
         <EditText
             android:id="@+id/wrongAns2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Answer 2"
+            android:hint="Wrong answer 2"
             android:inputType="textMultiLine" />
+
+        <EditText
+            android:id="@+id/wrongAns3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Wrong answer 3"
+            android:inputType="textMultiLine" >
+
+            <requestFocus />
+        </EditText>
     </LinearLayout>
 
-    <EditText
-        android:id="@+id/wrongAns3"
-        android:layout_width="match_parent"
+    <Button
+        android:id="@+id/done"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/done"
-        android:layout_alignLeft="@+id/linearLayout1"
-        android:layout_alignRight="@+id/linearLayout1"
-        android:ems="10"
-        android:hint="Answer 3"
-        android:inputType="textMultiLine" />
+        android:layout_alignBaseline="@+id/back"
+        android:layout_alignBottom="@+id/back"
+        android:layout_alignRight="@+id/challenge"
+        android:text="Done!" />
+
+    <TextView
+        android:id="@+id/headerForCreate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/challenge"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="36dp"
+        android:text="Challenge location:"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/tLat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/headerForCreate"
+        android:layout_below="@+id/headerForCreate"
+        android:text="Lat:"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/tAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tLat"
+        android:layout_below="@+id/tLat"
+        android:layout_marginTop="14dp"
+        android:text="Address:"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <EditText
         android:id="@+id/challenge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/linearLayout1"
         android:layout_alignLeft="@+id/linearLayout1"
-        android:layout_marginBottom="43dp"
+        android:layout_alignRight="@+id/linearLayout1"
+        android:layout_below="@+id/tAddress"
+        android:layout_marginTop="30dp"
         android:ems="10"
-        android:hint="Enter here your challenge................................."
+        android:hint="here goes your challenge"
         android:inputType="textMultiLine" />
+
+    <TextView
+        android:id="@+id/tLong"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/challenge"
+        android:layout_below="@+id/headerForCreate"
+        android:text="Long:"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <Button
+        android:id="@+id/back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/linearLayout1"
+        android:layout_below="@+id/linearLayout1"
+        android:text="Back" />
 
 </RelativeLayout>
