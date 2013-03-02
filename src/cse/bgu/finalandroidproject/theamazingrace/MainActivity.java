@@ -3,16 +3,17 @@ package cse.bgu.finalandroidproject.theamazingrace;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.android.gms.maps.model.LatLng;
-
+import android.annotation.SuppressLint;
+import android.app.ActionBar;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
+import android.widget.Toast;
+
+import com.google.android.gms.maps.model.LatLng;
 
 public class MainActivity extends Activity {
 
@@ -26,22 +27,29 @@ public class MainActivity extends Activity {
 	
 	public void goToPlay(View view){
 		
-		startActivity(new Intent(this, PlayGame.class));
+		//startActivity(new Intent(this, PlayGame.class));
+		Toast.makeText(this, "not available anymore", Toast.LENGTH_LONG).show();
 	}
 
 	public void goToCreate(View view){
-		startActivity(new Intent(this, CreateGame.class));
+		startActivity(new Intent(this, CreateGameInstructions.class));
 	}
 	
 	public void goToGameList(View view){
 		startActivity(new Intent(this, ListOfGames.class));
 	}
 
+	@SuppressLint("NewApi")
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.activity_main, menu);
-		return true;
+		
+		ActionBar actionBar;
+	    MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.my_menu, menu);
+	    actionBar=getActionBar();
+	    actionBar.setHomeButtonEnabled(true);
+	    return true;
 	}
 	
 	public void initTest(){

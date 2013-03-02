@@ -13,81 +13,68 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical" >
-
-        <TextView
-            android:id="@+id/latlng"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="20sp" />
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
+
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/label_address"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/get_my_Loc"
-        android:layout_alignLeft="@+id/get_my_location"
-        android:text="Please enter the next chckpoint:"
-        android:textSize="20sp" />
-
-    <TextView
-        android:id="@+id/label_latlng"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/label_address"
-        android:layout_alignLeft="@+id/label_address"
-        android:text="@string/latlng"
-        android:textSize="22sp" />
-
-    <TextView
-        android:id="@+id/address"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/label_latlng"
-        android:layout_alignLeft="@+id/label_latlng"
-        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/tap_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/camera_text"
-        android:layout_alignLeft="@+id/camera_text"
-        android:layout_marginBottom="30dp"
-        android:text="Tap long on the map, enter your own location or enter an address." />
+        android:layout_alignLeft="@+id/linearLayout1"
+        android:layout_alignParentTop="true"
+        android:text="Tap long on the map or enter your own location." />
 
     <fragment
         android:id="@+id/map"
         android:layout_width="match_parent"
         android:layout_height="210dp"
         android:layout_above="@+id/get_my_loc"
-        android:layout_alignLeft="@+id/camera_text"
-        android:layout_below="@+id/tap_text"
+        android:layout_alignLeft="@+id/tap_text"
+        android:layout_below="@+id/address"
         android:layout_weight="0.27"
         class="com.google.android.gms.maps.SupportMapFragment" />
 
-    <TextView
-        android:id="@+id/camera_text"
-        android:layout_width="match_parent"
+    <Button
+        android:id="@+id/create_game_back"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/linearLayout2"
-        android:layout_below="@+id/linearLayout2"
-        android:layout_marginTop="72dp"
-        android:text="@string/move_the_camera" />
+        android:layout_alignLeft="@+id/get_my_loc"
+        android:layout_alignParentBottom="true"
+        android:text="Back"
+        android:onClick="backClicked" />
+
+    <Button
+        android:id="@+id/bSave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/create_game_back"
+        android:layout_alignBottom="@+id/create_game_back"
+        android:layout_alignRight="@+id/get_my_loc"
+        android:text="Save!"
+        android:onClick="bSaveClicked" />
 
     <Button
         android:id="@+id/get_my_loc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/create_game_back"
         android:layout_alignLeft="@+id/map"
-        android:layout_alignParentBottom="true"
         android:layout_alignRight="@+id/map"
         android:text="My location" />
+
+    <TextView
+        android:id="@+id/address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tap_text"
+        android:layout_below="@+id/tap_text"
+        android:hint="your choosen address"
+        android:textSize="20dp" />
 
 </RelativeLayout>

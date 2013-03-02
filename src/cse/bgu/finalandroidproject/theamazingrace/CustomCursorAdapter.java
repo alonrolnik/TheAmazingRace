@@ -32,7 +32,7 @@ public class CustomCursorAdapter extends CursorAdapter {
         // that means, take the data from the cursor and put it in views
 
         TextView textViewGameName = (TextView) view.findViewById(R.id.text_game_name);
-        textViewGameName.setText(cursor.getString(cursor.getColumnIndex(cursor.getColumnName(1))));
+        textViewGameName.setText(cursor.getString(cursor.getColumnIndex(cursor.getColumnName(1))).replace("_", " "));
 
         TextView textViewArea = (TextView) view.findViewById(R.id.text_area);
         textViewArea.setText(cursor.getString(cursor.getColumnIndex(cursor.getColumnName(2))));

@@ -1,6 +1,7 @@
 package cse.bgu.finalandroidproject.theamazingrace;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -26,7 +27,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
-import android.view.WindowManager.LayoutParams;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.PopupWindow;
@@ -44,31 +44,33 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 
+@SuppressLint("ValidFragment")
 public class CreateGame extends android.support.v4.app.FragmentActivity 
 implements	 OnMapClickListener, OnMapLongClickListener, OnCameraChangeListener{
+
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+	}
+
+	@Override
+	protected void onResumeFragments() {
+		// TODO Auto-generated method stub
+		super.onResumeFragments();
+	}
 
 	/**
 	 * Note that this may be null if the Google Play services APK is not available.
 	 */
 	private GoogleMap mMap;
 	private TextView mTapTextView;
-	private TextView mCameraTextView;
 	private Button getMyLocation;
-	private Button enterAddress;
 	// UI handler codes.
-	private TextView mLatLng;
 	private TextView mAddress;
-	private Button mFineProviderButton;
-	private Button mBothProviderButton;
 	private LocationManager mLocationManager;
 	private Handler mHandler;
 	private boolean mGeocoderAvailable;
-	private boolean mUseFine;
-	private boolean mUseBoth;
-
-	// Keys for maintaining UI states after rotation.
-	private static final String KEY_FINE = "use_fine";
-	private static final String KEY_BOTH = "use_both";
 	// UI handler codes.
 	private static final int UPDATE_ADDRESS = 1;
 	private static final int UPDATE_LATLNG = 2;
@@ -79,11 +81,13 @@ implements	 OnMapClickListener, OnMapLongClickListener, OnCameraChangeListener{
 	private static final int TEN_METERS = 10;
 	private static final int TWO_MINUTES = 1000 * 60 * 2;
 
-
-	// challenge variables
+	// game variables
 	private LatLng currntPoint;
 	private String newAddress;
-
+	private String game_name;
+	private String area;
+	private String creator;
+	private List<Challenge> challengesList = new ArrayList<Challenge>();
 	MySQLiteOpenHelper db = new MySQLiteOpenHelper(this);
 
 	@SuppressLint("NewApi")
@@ -91,27 +95,16 @@ implements	 OnMapClickListener, OnMapLongClickListener, OnCameraChangeListener{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_create_game);
-		mTapTextView = (TextView) findViewById(R.id.tap_text);
-		mCameraTextView = (TextView) findViewById(R.id.camera_text);
-		getMyLocation = (Button) findViewById(R.id.get_my_loc);
+		
+		game_name = getIntent().getStringExtra(Extras.GAME_NAME);
+		area = getIntent().getStringExtra(Extras.Area);
+		creator = getIntent().getStringExtra(Extras.Creator);
+		
 		setUpMapIfNeeded();
-
-
-		// Restore apps state (if exists) after rotation.
-		if (savedInstanceState != null) {
-			mUseFine = savedInstanceState.getBoolean(KEY_FINE);
-			mUseBoth = savedInstanceState.getBoolean(KEY_BOTH);
-		} else {
-			mUseFine = false;
-			mUseBoth = false;
-		}
-		mLatLng = (TextView) findViewById(R.id.latlng);
+		
+		getMyLocation = (Button) findViewById(R.id.get_my_loc);
 		mAddress = (TextView) findViewById(R.id.address);
-		// Receive location updates from the fine location provider (GPS) only.
-		mFineProviderButton = (Button) findViewById(R.id.provider_fine);
-		// Receive location updates from both the fine (GPS) and coarse (network) location
-		// providers.
-		mBothProviderButton = (Button) findViewById(R.id.provider_both);
+		mTapTextView = (TextView) findViewById(R.id.tap_text);
 
 		// The isPresent() helper method is only available on Gingerbread or above.
 		mGeocoderAvailable =
@@ -125,7 +118,7 @@ implements	 OnMapClickListener, OnMapLongClickListener, OnCameraChangeListener{
 							mAddress.setText((String) msg.obj);
 							break;
 						case UPDATE_LATLNG:
-							mLatLng.setText((String) msg.obj);
+							//mLatLng.setText((String) msg.obj);
 							break;
 						case UPDATE_SHORT:
 							newAddress = (String)msg.obj;
@@ -139,28 +132,11 @@ implements	 OnMapClickListener, OnMapLongClickListener, OnCameraChangeListener{
 						}
 					}
 				};
+				
 				// Get a reference to the LocationManager object.
 				mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-				/*	        
-	        // loading the first challenge
-	        //////////////////////////////////////////////////////////////////
-	        myList.add(newChallenge[0]);
-	        myList.add(newChallenge[1]);
-	        myList.add(newChallenge[2]);
-	        myList.add(newChallenge[3]);
-
-	        //Challenge curChallenge = myList.iterator().next();
-	        if (myIterator==null) 
-				myIterator = myList.iterator();
-
-	        suffleAnswers(myIterator.next());
-
-	        /////////////////////////////////////////////////////////////////
-				 */			
-				
 				getMyLocation.setOnClickListener(new View.OnClickListener() {
-
 					@Override
 					public void onClick(View v) {
 						Location myLocation = new Location("myLoc");        
@@ -183,22 +159,13 @@ implements	 OnMapClickListener, OnMapLongClickListener, OnCameraChangeListener{
 						}
 						if(myLocation==null){
 							Log.d("myLocationis:", "null");
-							
+
 						}
 						mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(myLocation.getLatitude(), myLocation.getLongitude()), 16));
 						mMap.addMarker(new MarkerOptions().position(new LatLng(myLocation.getLatitude(), myLocation.getLongitude())).title("You are here!"));
 					}
-					
 
 				});
-	}
-
-	// Restores UI states after rotation.
-	@Override
-	protected void onSaveInstanceState(Bundle outState) {
-		super.onSaveInstanceState(outState);
-		outState.putBoolean(KEY_FINE, mUseFine);
-		outState.putBoolean(KEY_BOTH, mUseBoth);
 	}
 
 	@Override
@@ -240,45 +207,6 @@ implements	 OnMapClickListener, OnMapLongClickListener, OnCameraChangeListener{
 		mLocationManager.removeUpdates(listener);
 	}
 
-	// Set up fine and/or coarse location providers depending on whether the fine provider or
-	// both providers button is pressed.
-	private void setup() {
-		Location gpsLocation = null;
-		Location networkLocation = null;
-		mLocationManager.removeUpdates(listener);
-		mLatLng.setText(R.string.unknown);
-		mAddress.setText(R.string.unknown);
-		// Get fine location updates only.
-		if (mUseFine) {
-			mFineProviderButton.setBackgroundResource(R.drawable.button_active);
-			mBothProviderButton.setBackgroundResource(R.drawable.button_inactive);
-			// Request updates from just the fine (gps) provider.
-			gpsLocation = requestUpdatesFromProvider(
-					LocationManager.GPS_PROVIDER, R.string.not_support_gps);
-			// Update the UI immediately if a location is obtained.
-			if (gpsLocation != null) updateUILocation(gpsLocation);
-		} else if (mUseBoth) {
-			// Get coarse and fine location updates.
-			mFineProviderButton.setBackgroundResource(R.drawable.button_inactive);
-			mBothProviderButton.setBackgroundResource(R.drawable.button_active);
-			// Request updates from both fine (gps) and coarse (network) providers.
-			gpsLocation = requestUpdatesFromProvider(
-					LocationManager.GPS_PROVIDER, R.string.not_support_gps);
-			networkLocation = requestUpdatesFromProvider(
-					LocationManager.NETWORK_PROVIDER, R.string.not_support_network);
-
-			// If both providers return last known locations, compare the two and use the better
-			// one to update the UI.  If only one provider returns a location, use it.
-			if (gpsLocation != null && networkLocation != null) {
-				updateUILocation(getBetterLocation(gpsLocation, networkLocation));
-			} else if (gpsLocation != null) {
-				updateUILocation(gpsLocation);
-			} else if (networkLocation != null) {
-				updateUILocation(networkLocation);
-			}
-		}
-	}
-
 	/**
 	 * Method to register location updates with a desired location provider.  If the requested
 	 * provider is not available on the device, the app displays a Toast with a message referenced
@@ -301,44 +229,12 @@ implements	 OnMapClickListener, OnMapLongClickListener, OnCameraChangeListener{
 		return location;
 	}
 
-	// Callback method for the "fine provider" button.
-	public void useFineProvider(View v) {
-		mUseFine = true;
-		mUseBoth = false;
-		setup();
-	}
-
-	// Callback method for the "both providers" button.
-	public void useCoarseFineProviders(View v) {
-		mUseFine = false;
-		mUseBoth = true;
-		setup();
-	}
-
-	private void doReverseGeocoding(Location location) {
-		// Since the geocoding API is synchronous and may take a while.  You don't want to lock
-		// up the UI thread.  Invoking reverse geocoding in an AsyncTask.
-		(new ReverseGeocodingTask(this)).execute(new Location[] {location});
-	}
-
-	private void updateUILocation(Location location) {
-		// We're sending the update to a handler which then updates the UI with the new
-		// location.
-		Message.obtain(mHandler,
-				UPDATE_LATLNG,
-				location.getLatitude() + ", " + location.getLongitude()).sendToTarget();
-
-		// Bypass reverse-geocoding only if the Geocoder service is available on the device.
-		if (mGeocoderAvailable) doReverseGeocoding(location);
-	}
-
 	private final LocationListener listener = new LocationListener() {
 
 		@Override
 		public void onLocationChanged(Location location) {
 			// A new location update is received.  Do something useful with it.  Update the UI with
 			// the location update.
-			updateUILocation(location);
 		}
 
 		@Override
@@ -411,43 +307,6 @@ implements	 OnMapClickListener, OnMapLongClickListener, OnCameraChangeListener{
 			return provider2 == null;
 		}
 		return provider1.equals(provider2);
-	}
-
-	// AsyncTask encapsulating the reverse-geocoding API.  Since the geocoder API is blocked,
-	// we do not want to invoke it from the UI thread.
-	private class ReverseGeocodingTask extends AsyncTask<Location, Void, Void> {
-		Context mContext;
-
-		public ReverseGeocodingTask(Context context) {
-			super();
-			mContext = context;
-		}
-
-		@Override
-		protected Void doInBackground(Location... params) {
-			Geocoder geocoder = new Geocoder(mContext, Locale.getDefault());
-
-			Location loc = params[0];
-			List<Address> addresses = null;
-			try {
-				addresses = geocoder.getFromLocation(loc.getLatitude(), loc.getLongitude(), 1);
-			} catch (IOException e) {
-				e.printStackTrace();
-				// Update address field with the exception.
-				Message.obtain(mHandler, UPDATE_ADDRESS, e.toString()).sendToTarget();
-			}
-			if (addresses != null && addresses.size() > 0) {
-				Address address = addresses.get(0);
-				// Format the first line of address (if available), city, and country name.
-				String addressText = String.format("%s, %s, %s",
-						address.getMaxAddressLineIndex() > 0 ? address.getAddressLine(0) : "",
-								address.getLocality(),
-								address.getCountryName());
-				// Update address field on UI.
-				Message.obtain(mHandler, UPDATE_ADDRESS, addressText).sendToTarget();
-			}
-			return null;
-		}
 	}
 
 	/**
@@ -525,14 +384,12 @@ implements	 OnMapClickListener, OnMapLongClickListener, OnCameraChangeListener{
 		mMap.setOnCameraChangeListener(this);
 	}
 
-
-
 	/**
 	 * Get the player location
 	 */
-	public void checkMyLocation(View view){    	
-	}
+	public void checkMyLocation(View view){    
 
+	}
 
 	@Override
 	public void onMapClick(LatLng point) {
@@ -554,8 +411,6 @@ implements	 OnMapClickListener, OnMapLongClickListener, OnCameraChangeListener{
 		}	
 		currntPoint = point;// added marker on tapped point
 	}
-	
-	
 
 	@Override
 	public void onCameraChange(final CameraPosition position) {
@@ -568,8 +423,6 @@ implements	 OnMapClickListener, OnMapLongClickListener, OnCameraChangeListener{
 		getMenuInflater().inflate(R.menu.activity_play_game, menu);
 		return true;
 	}
-
-
 
 	private void createChallenge(final LatLng point){
 
@@ -599,7 +452,7 @@ implements	 OnMapClickListener, OnMapLongClickListener, OnCameraChangeListener{
 
 
 		popupWindow.setFocusable(true); 
-		popupWindow.showAsDropDown(getMyLocation, 0, 300);//showAsDropDown(getMyLocation);//some location on the layout)
+		popupWindow.showAsDropDown(getMyLocation, 0, 100);//showAsDropDown(getMyLocation);//some location on the layout)
 
 
 		buttonBack.setOnClickListener(new View.OnClickListener() {
@@ -614,30 +467,23 @@ implements	 OnMapClickListener, OnMapLongClickListener, OnCameraChangeListener{
 			@Override
 			public void onClick(View v) {
 				if(
-						(myChallenge.getText() != null)&&
-						(correctAnswer.getText() != null)&& 
-						(answer1.getText() !=null)&&
-						(answer2.getText() != null)&&
-						(answer3.getText() != null)){
+						(myChallenge.length() > 0)&&
+						(correctAnswer.length() > 0)&& 
+						(answer1.length() > 0)&&
+						(answer2.length() > 0)&&
+						(answer3.length() > 0)){
 					Challenge challenge = new Challenge(point,
 							myChallenge.getText().toString(),
 							correctAnswer.getText().toString(), 
 							new String[] {answer1.getText().toString(), answer2.getText().toString(), answer3.getText().toString()});
-					//add new challenge to DB
-					/*long id = db.addChallenge(challenge);
+					challengesList.add(challenge);
 					mMap.addMarker(new MarkerOptions().position(point).visible(true));
-					if(id!=-1)
-						Toast.makeText(getBaseContext(), "challenge added!", Toast.LENGTH_LONG).show();
-					else
-						Toast.makeText(getBaseContext(), "Error on inserting challenge to DB", Toast.LENGTH_LONG).show();*/
+
 				}else
-					Toast.makeText(getBaseContext(), "Error some fiels is null", Toast.LENGTH_LONG).show();
+					Toast.makeText(getBaseContext(), "You must fill in all the feilds for create a challenge", Toast.LENGTH_LONG).show();
 				popupWindow.dismiss();
 			}
 		});
-
-		
-
 	}
 
 	private void doReverseGeocoding1(Location location, int ourCase) {
@@ -684,5 +530,21 @@ implements	 OnMapClickListener, OnMapLongClickListener, OnCameraChangeListener{
 			}
 			return null;
 		}
+	}
+	public void bSaveClicked(View view){
+		if(!challengesList.isEmpty()){
+		Game game = new Game(creator, game_name, area, challengesList);
+		db.addGame(game);
+		Toast.makeText(this, "game added to db", Toast.LENGTH_LONG).show();
+		challengesList.clear();
+		}else
+			Toast.makeText(this, "you need to create at least one challenge before save", Toast.LENGTH_LONG).show();
+	}
+
+public void backClicked (View view){
+	Intent intent = new Intent (this,MainActivity.class);
+	intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+	startActivity(intent);
+
 	}
 }

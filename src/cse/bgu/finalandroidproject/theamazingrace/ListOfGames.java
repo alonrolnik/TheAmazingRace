@@ -19,7 +19,6 @@ public class ListOfGames extends Activity
 
 	MySQLiteOpenHelper db = new MySQLiteOpenHelper(this);
 	private CustomCursorAdapter customAdapter;
-	private static final int ENTER_DATA_REQUEST_CODE = 1;
 	private ListView listView;
 
 	@Override
@@ -28,14 +27,13 @@ public class ListOfGames extends Activity
 		setContentView(R.layout.activity_list_of_game);
 		listView = (ListView) findViewById(R.id.list_data);
 
-
 		listView.setOnItemClickListener(new OnItemClickListener(){
 			@Override
 			public void onItemClick(AdapterView<?> parent, View v, 
 					int position, long id) {
 				TextView tv = (TextView) v.findViewById(R.id.text_game_name);
 				Intent mIntent = new Intent(getBaseContext(), PlayGame.class);
-				mIntent.putExtra(Extras.GAME_NAME, tv.getText().toString());
+				mIntent.putExtra(Extras.GAME_NAME, tv.getText().toString().replace(" ","_"));
 				startActivity(mIntent);
 			}				
 		}
@@ -55,14 +53,4 @@ public class ListOfGames extends Activity
 		});
 	}
 	
-/*	@Override
-	protected void onListItemClick(ListView l, View v, int position, long id) {
-		// TODO Auto-generated method stub
-		super.onListItemClick(l, v, position, id);
-		TextView tv = (TextView) v.findViewById(R.id.text_game_name);
-		Intent mIntent = new Intent(this, ListOfGames.class);
-		mIntent.putExtra(Extras.GAME_NAME, tv.getText().toString());
-	}
-*/
-
 }
