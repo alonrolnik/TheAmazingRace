@@ -46,7 +46,6 @@ public class DB_Schema {
 	    public static final String ANSWER1 = "answer1";
 	    public static final String ANSWER2 = "answer2";
 	    public static final String ANSWER3 = "answer3";
-	    
 	}	    
 
 }

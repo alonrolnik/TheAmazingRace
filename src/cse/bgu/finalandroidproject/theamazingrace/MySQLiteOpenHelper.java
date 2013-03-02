@@ -1,6 +1,7 @@
 package cse.bgu.finalandroidproject.theamazingrace;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import android.content.ContentValues;
@@ -50,20 +51,19 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 //	        		" );"
 //        		);	
 //        
-//     // create games list table
-//        db.execSQL
-//        		(
-//	        		"create table " +
-//	        		DB_Schema.GamLstTable.TABLE_NAME +
-//	        		"(" +
-//	        		DB_Schema.GamLstTable._ID +
-//	        		" integer primary key autoincrement, " +
-//	        		DB_Schema.GamLstTable.GAME_NAME + "text ," +
-//	        		DB_Schema.GamLstTable.CREATOR + "text ," +
-//	        		DB_Schema.GamLstTable.AREA + "text ," +
-//	        		DB_Schema.GamLstTable.LEADING_SCORE + "Integer ," +
-//	        		" );"
-//        		);
+     // create games list table
+        db.execSQL
+        		(
+	        		"create table " +
+	        		DB_Schema.GamLstTable.TABLE_NAME +
+	        		"(" +
+	        		DB_Schema.GamLstTable._ID +
+	        		" integer primary key autoincrement, " +
+	        		DB_Schema.GamLstTable.GAME_NAME + " text ," +
+	        		DB_Schema.GamLstTable.CREATOR + " text ," +
+	        		DB_Schema.GamLstTable.AREA + " text" +
+	        		" );"
+        		);
 //     // create game statistics table
 //        db.execSQL
 //        		(
@@ -78,22 +78,6 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 //	        		" );"
 //        		);
 //     // create game scenario table
-        db.execSQL
-        		(
-	        		"create table " +
-	        		DB_Schema.GmeScenro.TABLE_NAME +
-	        		" (" +
-	        		DB_Schema.GmeScenro._ID +
-	        		" integer primary key autoincrement, " +
-	        		DB_Schema.GmeScenro.CHECKPOINT_LAT + " real," +
-	        		DB_Schema.GmeScenro.CHECKPOINT_LONG + " real," +
-	        		DB_Schema.GmeScenro.CHALLENGE + " text," +
-	        		DB_Schema.GmeScenro.RIGHT_ANSWER + " text," +
-	        		DB_Schema.GmeScenro.ANSWER1 + " text," +
-	        		DB_Schema.GmeScenro.ANSWER2 + " text," +
-	        		DB_Schema.GmeScenro.ANSWER3 + " text" +
-	        		");"
-	        	);
 	}
 
 	@Override
@@ -104,7 +88,13 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 		onCreate(db);
 	}
 	
-	public long addChallenge(Challenge challenge){
+	/**
+	 * add specific challenge to game_name table
+	 * @param challenge
+	 * @param game_name
+	 * @return
+	 */
+	public long addChallenge(Challenge challenge, String game_name){
 		SQLiteDatabase db;
 		ContentValues values = new ContentValues();
 		values.put(DB_Schema.GmeScenro.CHECKPOINT_LAT, challenge.getCheckpoint().latitude);
@@ -117,16 +107,94 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 		
 		//inserting row
 		db = this.getWritableDatabase();
-		long r_id = db.insert(DB_Schema.GmeScenro.TABLE_NAME, null, values);
+		long r_id = db.insert(game_name, null, values);
 		db.close(); // closing db connection
 		return r_id;
 	}
 	
-	public Challenge getChallenge(long id){
+	
+	/**
+	 * insert a complete game into the db.
+	 * this will create new table that it name is game.game_name
+	 * and add a row in the games list db
+	 * @param game
+	 */
+	public void addGame(Game game){
+		SQLiteDatabase db = this.getWritableDatabase();
+		Challenge challenge;
+		long r_id;
+		ContentValues chal_values = new ContentValues();
+		// create game table
+
+		db.execSQL
+		(
+				"create table " + game.getGame_name() +
+				" (" +
+				DB_Schema.GmeScenro._ID +
+				" integer primary key autoincrement, " +
+				DB_Schema.GmeScenro.CHECKPOINT_LAT + " real," +
+				DB_Schema.GmeScenro.CHECKPOINT_LONG + " real," +
+				DB_Schema.GmeScenro.CHALLENGE + " text," +
+				DB_Schema.GmeScenro.RIGHT_ANSWER + " text," +
+				DB_Schema.GmeScenro.ANSWER1 + " text," +
+				DB_Schema.GmeScenro.ANSWER2 + " text," +
+				DB_Schema.GmeScenro.ANSWER3 + " text" +
+				");"
+				);
+
+
+		ContentValues values = new ContentValues();
+		values.put(DB_Schema.GamLstTable.GAME_NAME, game.getGame_name());
+		values.put(DB_Schema.GamLstTable.CREATOR, game.getCreator());
+		values.put(DB_Schema.GamLstTable.AREA, game.getArea());
+		
+		// insert game properties to game list table
+		db.insert(DB_Schema.GamLstTable.TABLE_NAME, null, values);
+
+		Iterator<Challenge> it = game.getGame_challenges().iterator();
+		while (it.hasNext()) {
+			challenge = it.next();
+			chal_values.put(DB_Schema.GmeScenro.CHECKPOINT_LAT, challenge.getCheckpoint().latitude);
+			chal_values.put(DB_Schema.GmeScenro.CHECKPOINT_LONG, challenge.getCheckpoint().longitude);
+			chal_values.put(DB_Schema.GmeScenro.CHALLENGE, challenge.getChallenge());
+			chal_values.put(DB_Schema.GmeScenro.ANSWER1, challenge.getWrong_answers(0));
+			chal_values.put(DB_Schema.GmeScenro.ANSWER2, challenge.getWrong_answers(1));
+			chal_values.put(DB_Schema.GmeScenro.ANSWER3, challenge.getWrong_answers(2));
+			chal_values.put(DB_Schema.GmeScenro.RIGHT_ANSWER, challenge.getRight_answer());
+
+			//inserting row
+			r_id = db.insert(game.game_name, null, chal_values);
+			if(r_id == -1)
+				Log.d("error inserting challenge", "Error inserting challeng");
+		}
+		db.close(); // closing db connection
+
+	}
+	
+	/**
+	 * call this method if you want list of all games
+	 * @return
+	 */
+	public Cursor get_all_games(){
+		
+		SQLiteDatabase db = getReadableDatabase();
+		Cursor mCursor = db.query(DB_Schema.GamLstTable.TABLE_NAME,null , null, null, null, null, null); 
+		//db.close();
+        //mCursor.close();
+
+		return mCursor;
+	}
+	/**
+	 * get specific challenge from game_name table
+	 * @param id
+	 * @param game_name
+	 * @return
+	 */
+	public Challenge getChallenge(long id, String game_name){
 		SQLiteDatabase db;
 		db = this.getReadableDatabase();
 		Cursor c = db.query(
-				DB_Schema.GmeScenro.TABLE_NAME,
+				game_name,
 				projection_game, DB_Schema.GmeScenro._ID + "=?",
 					new String[] { String.valueOf(id) },
 					null, null, null);
@@ -139,6 +207,7 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 		return curToChallenge(c);
 	}
 
+	
 	private Challenge curToChallenge(Cursor c) {
 		// TODO Auto-generated method stub
 		Challenge challenge = new Challenge();
@@ -148,12 +217,17 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 		challenge.setRight_answer(c.getString(4));
 		return challenge;
 	}
-
-	public List<Challenge> getEntireGame(){
+	
+	/**
+	 * get the whole challenges of the game_name game 
+	 * @param game_name
+	 * @return
+	 */
+	public List<Challenge> getEntireChallenges(String game_name){
 		List<Challenge> list = new ArrayList<Challenge>();
 		SQLiteDatabase db = this.getReadableDatabase();
 	Cursor c = db.query(
-			DB_Schema.GmeScenro.TABLE_NAME,
+			game_name,
 			projection_game, null,
 			null, null, null, null);
 		c.moveToFirst();

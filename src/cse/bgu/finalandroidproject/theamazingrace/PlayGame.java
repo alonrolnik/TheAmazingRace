@@ -128,7 +128,7 @@ implements	 OnMapClickListener, OnMapLongClickListener, OnCameraChangeListener{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_play_game);
-		myList = db.getEntireGame();
+		myList = db.getEntireChallenges(getIntent().getStringExtra(Extras.GAME_NAME));
 		mTapTextView = (TextView) findViewById(R.id.tap_text);
 		mCameraTextView = (TextView) findViewById(R.id.camera_text);
 		checkMyLocation = (Button) findViewById(R.id.checkMyLocation);

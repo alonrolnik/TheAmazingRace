@@ -32,17 +32,13 @@
         android:text="create"
         android:onClick="goToCreate" />
 
-    <EditText
-        android:id="@+id/editText1"
+    <Button
+        android:id="@+id/gamelist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/PlayGame"
-        android:layout_below="@+id/textView1"
-        android:layout_marginTop="40dp"
-        android:ems="10"
-        android:hint="bla" >
-
-        <requestFocus />
-    </EditText>
+        android:layout_below="@+id/PlayGame"
+        android:layout_toRightOf="@+id/textView1"
+        android:text="Button"
+        android:onClick="goToGameList" />
 
 </RelativeLayout>

@@ -624,12 +624,12 @@ implements	 OnMapClickListener, OnMapLongClickListener, OnCameraChangeListener{
 							correctAnswer.getText().toString(), 
 							new String[] {answer1.getText().toString(), answer2.getText().toString(), answer3.getText().toString()});
 					//add new challenge to DB
-					long id = db.addChallenge(challenge);
+					/*long id = db.addChallenge(challenge);
 					mMap.addMarker(new MarkerOptions().position(point).visible(true));
 					if(id!=-1)
 						Toast.makeText(getBaseContext(), "challenge added!", Toast.LENGTH_LONG).show();
 					else
-						Toast.makeText(getBaseContext(), "Error on inserting challenge to DB", Toast.LENGTH_LONG).show();
+						Toast.makeText(getBaseContext(), "Error on inserting challenge to DB", Toast.LENGTH_LONG).show();*/
 				}else
 					Toast.makeText(getBaseContext(), "Error some fiels is null", Toast.LENGTH_LONG).show();
 				popupWindow.dismiss();

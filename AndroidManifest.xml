@@ -50,7 +50,11 @@
             </intent-filter>
         </activity>
         
-
+        <activity
+            android:name="cse.bgu.finalandroidproject.theamazingrace.ListOfGames"
+            android:label="@string/title_activity_list_of_games" >
+        </activity>
+                
         <activity
             android:name="cse.bgu.finalandroidproject.theamazingrace.CreateGame"
             android:label="@string/title_activity_create_game" >
