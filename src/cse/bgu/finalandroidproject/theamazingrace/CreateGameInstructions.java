@@ -18,6 +18,7 @@ public class CreateGameInstructions extends Activity {
 	private EditText gameName;
 	private EditText creator;
 	private EditText area;
+	private MySQLiteOpenHelper db = new MySQLiteOpenHelper(this);
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -33,17 +34,27 @@ public class CreateGameInstructions extends Activity {
 				(area.getText().length() > 0) &&
 				(creator.getText().length() > 0 ) 
 				){
+			if(!name_exist(gameName.getText().toString().replace(" ", "_"))){
 			Intent intent = new Intent(this, CreateGame.class);
 			intent.putExtra(Extras.Area,area.getText().toString());
 			intent.putExtra(Extras.Creator,creator.getText().toString());
 			intent.putExtra(Extras.GAME_NAME,gameName.getText().toString().replace(" ", "_"));
 			startActivity(intent);
+			}
+			else
+				Toast.makeText(this, "name allready exist, please choose another name", Toast.LENGTH_LONG).show();
 		}
 		else {
 			Toast.makeText(this, "Please fill in all the fields", Toast.LENGTH_LONG).show();
 		}
 	}
 	
+	private boolean name_exist(String replace) {
+		// TODO Auto-generated method stub
+		
+		return db.is_name_exist(replace);
+	}
+
 	public void bBackClicked(View v){
 		Intent intent = new Intent(this, MainActivity.class);
 		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

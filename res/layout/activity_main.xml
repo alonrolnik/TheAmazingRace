@@ -2,27 +2,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity" >
+    tools:context=".MainActivity"
+    android:background="@drawable/map" >
 
     <Button
         android:id="@+id/gamelist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/create"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="100dp"
-        android:layout_marginTop="134dp"
+        android:layout_marginBottom="24dp"
         android:onClick="goToGameList"
-        android:text="Button" />
+        android:text="choose existng game" />
 
     <Button
         android:id="@+id/create"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/gamelist"
-        android:layout_below="@+id/gamelist"
-        android:layout_marginTop="110dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="64dp"
         android:onClick="goToCreate"
-        android:text="create" />
+        android:text="create your own game" />
 
 </RelativeLayout>

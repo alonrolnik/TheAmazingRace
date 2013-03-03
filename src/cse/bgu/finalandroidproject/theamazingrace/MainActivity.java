@@ -98,7 +98,11 @@ public class MainActivity extends Activity {
 				startActivity(ext_intent);
 				finish();
 	    		return true;
-				 */	        default:
+				 */	        
+				
+			case R.id.About:
+				startActivity(new Intent(this, AboutActivity.class));
+			default:
 					 return super.onMenuItemSelected(featureId, item);
 
 			}

@@ -3,7 +3,7 @@
     <item android:id="@+id/menu_back_to_main_menu"
           android:title="Main Menu"
           android:showAsAction="ifRoom" />
-    <item android:id="@+id/help"
-          android:title="help"
+        <item android:id="@+id/menu_return_to_game"
+          android:title="Return"
           android:showAsAction="ifRoom" />
 </menu>

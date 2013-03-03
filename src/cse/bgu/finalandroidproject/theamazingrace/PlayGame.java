@@ -680,40 +680,16 @@ implements	 OnMapClickListener, OnMapLongClickListener, OnCameraChangeListener{
 		// TODO Auto-generated method stub
 		{
 			switch (item.getItemId()) {
-
-//			case R.id.menu_exit_app:
-//				DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-//					@Override
-//					public void onClick(DialogInterface dialog, int which) {
-//						switch (which){
-//						case DialogInterface.BUTTON_POSITIVE:
-//							//exitApp();
-//							Toast.makeText(getBaseContext(),"Need to exit app", Toast.LENGTH_LONG).show();
-//							break;
-//						case DialogInterface.BUTTON_NEGATIVE:
-//							break;
-//						}
-//					}
-//				};
-//
-//				AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//				builder.setMessage("Are you sure?").setPositiveButton("Yes", dialogClickListener)
-//				.setNegativeButton("No", dialogClickListener).show();
-//				return true;
-				/*	    		SharedPreferences sharedPref = getSharedPreferences(MY_SHRD_PREF, Context.MODE_PRIVATE);
-            	SharedPreferences.Editor editor = sharedPref.edit();
-            	editor.putBoolean(EXIT_KEY, true);
-            	editor.commit();
-				Intent ext_intent = new Intent(this, cse.bgu.ex5.jokelistbook.JokesList.class);
-	            ext_intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-				startActivity(ext_intent);
-				finish();
-	    		return true;
-				 */	        
 			case R.id.menu_back_to_main_menu:
 				Intent intent = new Intent (this,MainActivity.class);
 				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				startActivity(intent);
+				return true;
+			case R.id.help_play_game:
+				Intent intent2 = new Intent (this,HelpActivity.class);
+				intent2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(intent2);
+				return true;
 			default:
 				return super.onMenuItemSelected(featureId, item);
 

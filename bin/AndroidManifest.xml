@@ -33,18 +33,19 @@
         <activity
             android:name="cse.bgu.finalandroidproject.theamazingrace.MainActivity"
             android:label="@string/title_activity_main"
-            android:uiOptions="splitActionBarWhenNarrow">
+            android:uiOptions="splitActionBarWhenNarrow" >
              >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            
         </activity>
         <activity
             android:name="cse.bgu.finalandroidproject.theamazingrace.PlayGame"
-            android:label="@string/title_activity_play_game" >
+            android:label="@string/title_activity_play_game"
+            android:uiOptions="splitActionBarWhenNarrow" >
+             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -53,15 +54,32 @@
         </activity>
         <activity
             android:name="cse.bgu.finalandroidproject.theamazingrace.ListOfGames"
-            android:label="@string/title_activity_list_of_games" >
+            android:label="@string/title_activity_list_of_games"
+            android:uiOptions="splitActionBarWhenNarrow" >
+             >
         </activity>
         <activity
             android:name="cse.bgu.finalandroidproject.theamazingrace.CreateGame"
-            android:label="@string/title_activity_create_game" >
+            android:label="@string/title_activity_create_game"
+            android:uiOptions="splitActionBarWhenNarrow" >
+             >
         </activity>
         <activity
             android:name="cse.bgu.finalandroidproject.theamazingrace.CreateGameInstructions"
-            android:label="@string/title_activity_create_game_instructions" >
+            android:label="@string/title_activity_create_game_instructions"
+            android:uiOptions="splitActionBarWhenNarrow" >
+             >
+        </activity>
+        <activity
+            android:name="cse.bgu.finalandroidproject.theamazingrace.AboutActivity"
+            android:label="@string/title_activity_about"
+            android:uiOptions="splitActionBarWhenNarrow" >
+             >
+        </activity>
+        <activity
+            android:name="cse.bgu.finalandroidproject.theamazingrace.HelpActivity"
+            android:label="@string/title_activity_help"
+            android:uiOptions="splitActionBarWhenNarrow" >
         </activity>
     </application>
 

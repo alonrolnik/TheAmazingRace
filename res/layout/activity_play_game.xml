@@ -6,7 +6,7 @@
     android:gravity="fill_horizontal"
     android:orientation="vertical"
     tools:context=".PlayGame" >
-	
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -38,20 +38,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical" >
-    <TextView android:id="@+id/label_address"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="22sp"
-        android:text="@string/address" />
 
-    <TextView
-        android:id="@+id/address"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="20sp" />
+        <TextView
+            android:id="@+id/label_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/address"
+            android:textSize="22sp" />
 
-</LinearLayout>
-    
+        <TextView
+            android:id="@+id/address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp" />
+    </LinearLayout>
+
     <fragment
         android:id="@+id/map"
         android:layout_width="match_parent"
@@ -59,33 +60,20 @@
         android:layout_weight="0.27"
         class="com.google.android.gms.maps.SupportMapFragment" />
 
-    <LinearLayout
+    <RelativeLayout
+        android:id="@+id/RelativeLayout1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
         <Button
             android:id="@+id/checkMyLocation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:onClick="checkMyLocation"
-            android:text="check_my_location" />
+            android:layout_width="110dp"
+            android:layout_height="85dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/go"
+            android:onClick="checkMyLocation" />
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="34dp"
-        android:orientation="horizontal" >
-
-        <Button
-            android:id="@+id/fill_in_back"
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="goBack"
-            android:text="Back" />
-
-    </LinearLayout>
+    </RelativeLayout>
 
 </LinearLayout>

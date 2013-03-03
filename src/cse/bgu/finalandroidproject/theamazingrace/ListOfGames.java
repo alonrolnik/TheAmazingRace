@@ -11,9 +11,9 @@ import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
-import android.webkit.WebView.FindListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,7 +45,32 @@ public class ListOfGames extends Activity
 			}				
 		}
 				);
+		
+		listView.setOnItemLongClickListener(new OnItemLongClickListener(){
 
+			@Override
+			public boolean onItemLongClick(AdapterView<?> parent, View v,
+					int position, long id) {
+				// TODO Auto-generated method stub
+				TextView tv = (TextView) v.findViewById(R.id.text_game_name);
+				DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						switch (which){
+						case DialogInterface.BUTTON_POSITIVE:
+							db.remove_game(parent().getText().toString().replace(" ","_"));
+							break;
+						case DialogInterface.BUTTON_NEGATIVE:
+							break;
+						}
+					}
+				};
+				AlertDialog.Builder builder = new AlertDialog.Builder(getBaseContext());
+				builder.setMessage("You about to delete thie game, are you sure?").setPositiveButton("Yes", dialogClickListener)
+				.setNegativeButton("No", dialogClickListener).show();
+			return true;
+			}
+		});
 		// Database query can be a time consuming task ..
 		// so its safe to call database query in another thread
 		// Handler, will handle this stuff for you :)
