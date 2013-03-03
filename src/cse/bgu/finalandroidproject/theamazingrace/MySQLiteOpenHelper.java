@@ -255,4 +255,11 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 	    }
 	    return false;
 	}
+
+	public void remove_game(String table_name) {
+	    SQLiteDatabase db = this.getWritableDatabase();
+	    db.delete(table_name, null, new String[] {});
+	    db.delete(DB_Schema.GamLstTable.TABLE_NAME, DB_Schema.GamLstTable.GAME_NAME + "=" + table_name, null);
+	    db.close();
+	}
 }

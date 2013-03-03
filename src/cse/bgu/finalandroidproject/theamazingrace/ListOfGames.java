@@ -52,20 +52,20 @@ public class ListOfGames extends Activity
 			public boolean onItemLongClick(AdapterView<?> parent, View v,
 					int position, long id) {
 				// TODO Auto-generated method stub
-				TextView tv = (TextView) v.findViewById(R.id.text_game_name);
+				final TextView tv = (TextView) v.findViewById(R.id.text_game_name);
 				DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						switch (which){
 						case DialogInterface.BUTTON_POSITIVE:
-							db.remove_game(parent().getText().toString().replace(" ","_"));
+							db.remove_game(tv.getText().toString().replace(" ","_"));
 							break;
 						case DialogInterface.BUTTON_NEGATIVE:
 							break;
 						}
 					}
 				};
-				AlertDialog.Builder builder = new AlertDialog.Builder(getBaseContext());
+				AlertDialog.Builder builder = new AlertDialog.Builder(ListOfGames.this);
 				builder.setMessage("You about to delete thie game, are you sure?").setPositiveButton("Yes", dialogClickListener)
 				.setNegativeButton("No", dialogClickListener).show();
 			return true;
