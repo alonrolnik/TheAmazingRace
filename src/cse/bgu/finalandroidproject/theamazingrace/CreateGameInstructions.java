@@ -1,9 +1,14 @@
 package cse.bgu.finalandroidproject.theamazingrace;
 
+import android.annotation.SuppressLint;
+import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -45,11 +50,67 @@ public class CreateGameInstructions extends Activity {
 		startActivity(intent);
 	}
 
+	
+
+	@SuppressLint("NewApi")
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.create_game_instructions, menu);
+
+		ActionBar actionBar;
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.create_game_instructions, menu);
+		actionBar=getActionBar();
+		actionBar.setHomeButtonEnabled(true);
 		return true;
+	}
+
+	@Override
+	public boolean onMenuItemSelected(int featureId, android.view.MenuItem item) {
+		// TODO Auto-generated method stub
+		{
+			switch (item.getItemId()) {
+
+			case R.id.menu_exit_app:
+				DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						switch (which){
+						case DialogInterface.BUTTON_POSITIVE:
+							//exitApp();
+							Toast.makeText(getBaseContext(),"Need to exit app", Toast.LENGTH_LONG).show();
+							break;
+						case DialogInterface.BUTTON_NEGATIVE:
+							break;
+						}
+					}
+				};
+
+				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				builder.setMessage("Are you sure?").setPositiveButton("Yes", dialogClickListener)
+				.setNegativeButton("No", dialogClickListener).show();
+				return true;
+				/*	    		SharedPreferences sharedPref = getSharedPreferences(MY_SHRD_PREF, Context.MODE_PRIVATE);
+        	SharedPreferences.Editor editor = sharedPref.edit();
+        	editor.putBoolean(EXIT_KEY, true);
+        	editor.commit();
+			Intent ext_intent = new Intent(this, cse.bgu.ex5.jokelistbook.JokesList.class);
+            ext_intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(ext_intent);
+			finish();
+    		return true;
+				 */
+
+			case R.id.menu_back_to_main_menu:
+				Intent intent = new Intent (this,MainActivity.class);
+				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(intent);
+			default:
+				return super.onMenuItemSelected(featureId, item);
+
+			}
+		}
+
 	}
 
 }

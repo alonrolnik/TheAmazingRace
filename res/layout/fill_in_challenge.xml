@@ -51,9 +51,8 @@
         android:id="@+id/done"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/back"
-        android:layout_alignBottom="@+id/back"
         android:layout_alignRight="@+id/challenge"
+        android:layout_below="@+id/linearLayout1"
         android:text="Done!" />
 
     <TextView
@@ -108,10 +107,12 @@
 
     <Button
         android:id="@+id/back"
+        style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/done"
+        android:layout_alignBottom="@+id/done"
         android:layout_alignLeft="@+id/linearLayout1"
-        android:layout_below="@+id/linearLayout1"
-        android:text="Back" />
+        android:text="back" />
 
 </RelativeLayout>

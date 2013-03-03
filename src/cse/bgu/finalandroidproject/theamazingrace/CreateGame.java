@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Locale;
 
 import android.annotation.SuppressLint;
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -26,6 +27,7 @@ import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -45,20 +47,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 
 @SuppressLint("ValidFragment")
-public class CreateGame extends android.support.v4.app.FragmentActivity 
+public class CreateGame extends android.support.v4.app.FragmentActivity
 implements	 OnMapClickListener, OnMapLongClickListener, OnCameraChangeListener{
-
-	@Override
-	protected void onPause() {
-		// TODO Auto-generated method stub
-		super.onPause();
-	}
-
-	@Override
-	protected void onResumeFragments() {
-		// TODO Auto-generated method stub
-		super.onResumeFragments();
-	}
 
 	/**
 	 * Note that this may be null if the Google Play services APK is not available.
@@ -95,13 +85,13 @@ implements	 OnMapClickListener, OnMapLongClickListener, OnCameraChangeListener{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_create_game);
-		
+
 		game_name = getIntent().getStringExtra(Extras.GAME_NAME);
 		area = getIntent().getStringExtra(Extras.Area);
 		creator = getIntent().getStringExtra(Extras.Creator);
-		
+
 		setUpMapIfNeeded();
-		
+
 		getMyLocation = (Button) findViewById(R.id.get_my_loc);
 		mAddress = (TextView) findViewById(R.id.address);
 		mTapTextView = (TextView) findViewById(R.id.tap_text);
@@ -127,12 +117,11 @@ implements	 OnMapClickListener, OnMapLongClickListener, OnCameraChangeListener{
 						case UPDATE_LONG:
 							newAddress = (String)msg.obj;
 							mTapTextView.setText("tapped, point=" + newAddress);
-							createChallenge(currntPoint);
 							break;
 						}
 					}
 				};
-				
+
 				// Get a reference to the LocationManager object.
 				mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
@@ -384,13 +373,6 @@ implements	 OnMapClickListener, OnMapLongClickListener, OnCameraChangeListener{
 		mMap.setOnCameraChangeListener(this);
 	}
 
-	/**
-	 * Get the player location
-	 */
-	public void checkMyLocation(View view){    
-
-	}
-
 	@Override
 	public void onMapClick(LatLng point) {
 		if (mGeocoderAvailable) {
@@ -408,6 +390,7 @@ implements	 OnMapClickListener, OnMapLongClickListener, OnCameraChangeListener{
 			tempLoc.setLatitude(point.latitude);
 			tempLoc.setLongitude(point.longitude);
 			doReverseGeocoding1(tempLoc, UPDATE_LONG);
+			createChallenge(currntPoint);
 		}	
 		currntPoint = point;// added marker on tapped point
 	}
@@ -417,28 +400,24 @@ implements	 OnMapClickListener, OnMapLongClickListener, OnCameraChangeListener{
 		//    mCameraTextView.setText(position.toString());
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.activity_play_game, menu);
-		return true;
-	}
-
 	private void createChallenge(final LatLng point){
+		// turn off gps listener to save battery
+		mLocationManager.removeUpdates(listener);
 
 		// inflate createChallenge pop up window
 		LayoutInflater layoutInflater = (LayoutInflater)getBaseContext().
 				getSystemService(LAYOUT_INFLATER_SERVICE);  
 		View popupView = layoutInflater.inflate(R.layout.fill_in_challenge, null);  
-		final PopupWindow popupWindow = new PopupWindow(popupView,700, 1000); 
-
+		final PopupWindow popupWindow = new PopupWindow(popupView,700, 1000);
+		
+		
 		final EditText myChallenge = (EditText) popupView.findViewById(R.id.challenge);
 		final EditText answer1 = (EditText) popupView.findViewById(R.id.wrongAns1);
 		final EditText answer2 = (EditText) popupView.findViewById(R.id.wrongAns2);
 		final EditText answer3 = (EditText) popupView.findViewById(R.id.wrongAns3);
 		final EditText correctAnswer = (EditText) popupView.findViewById(R.id.correctAns);
-		Button buttonBack = (Button) popupView.findViewById(R.id.back);
-		Button buttonDone = (Button) popupView.findViewById(R.id.done);
+		final Button buttonBack = (Button) popupView.findViewById(R.id.back);
+		final Button buttonDone = (Button) popupView.findViewById(R.id.done);
 		TextView tLat = (TextView) popupView.findViewById(R.id.tLat);
 		TextView tLong = (TextView) popupView.findViewById(R.id.tLong);
 		TextView tAddress = (TextView) popupView.findViewById(R.id.tAddress);
@@ -533,18 +512,82 @@ implements	 OnMapClickListener, OnMapLongClickListener, OnCameraChangeListener{
 	}
 	public void bSaveClicked(View view){
 		if(!challengesList.isEmpty()){
-		Game game = new Game(creator, game_name, area, challengesList);
-		db.addGame(game);
-		Toast.makeText(this, "game added to db", Toast.LENGTH_LONG).show();
-		challengesList.clear();
+			Game game = new Game(creator, game_name, area, challengesList);
+			db.addGame(game);
+			Toast.makeText(this, "game added to db", Toast.LENGTH_LONG).show();
+			challengesList.clear();
 		}else
 			Toast.makeText(this, "you need to create at least one challenge before save", Toast.LENGTH_LONG).show();
 	}
 
-public void backClicked (View view){
-	Intent intent = new Intent (this,MainActivity.class);
-	intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-	startActivity(intent);
+	public void backClicked (View view){
+		Intent intent = new Intent (this,MainActivity.class);
+		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		startActivity(intent);
 
 	}
+
+
+	@SuppressLint("NewApi")
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+
+		ActionBar actionBar;
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.create_game, menu);
+		actionBar=getActionBar();
+		actionBar.setHomeButtonEnabled(true);
+		return true;
+	}
+
+
+	@Override
+	public boolean onMenuItemSelected(int featureId, android.view.MenuItem item) {
+		// TODO Auto-generated method stub
+		{
+			switch (item.getItemId()) {
+
+			case R.id.menu_exit_app:
+				DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						switch (which){
+						case DialogInterface.BUTTON_POSITIVE:
+							//exitApp();
+							Toast.makeText(getBaseContext(),"Need to exit app", Toast.LENGTH_LONG).show();
+							break;
+						case DialogInterface.BUTTON_NEGATIVE:
+							break;
+						}
+					}
+				};
+
+				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				builder.setMessage("Are you sure?").setPositiveButton("Yes", dialogClickListener)
+				.setNegativeButton("No", dialogClickListener).show();
+				return true;
+				/*	    		SharedPreferences sharedPref = getSharedPreferences(MY_SHRD_PREF, Context.MODE_PRIVATE);
+        	SharedPreferences.Editor editor = sharedPref.edit();
+        	editor.putBoolean(EXIT_KEY, true);
+        	editor.commit();
+			Intent ext_intent = new Intent(this, cse.bgu.ex5.jokelistbook.JokesList.class);
+            ext_intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(ext_intent);
+			finish();
+    		return true;
+				 */
+
+			case R.id.menu_back_to_main_menu:
+				Intent intent = new Intent (this,MainActivity.class);
+				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(intent);
+			default:
+				return super.onMenuItemSelected(featureId, item);
+
+			}
+		}
+
+	}
+
 }

@@ -4,41 +4,25 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity" >
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:text="@string/hello_world" />
-
     <Button
-        android:id="@+id/PlayGame"
+        android:id="@+id/gamelist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="65dp"
-        android:layout_toLeftOf="@+id/textView1"
-        android:text="play"
-        android:onClick="goToPlay" />
+        android:layout_marginLeft="100dp"
+        android:layout_marginTop="134dp"
+        android:onClick="goToGameList"
+        android:text="Button" />
 
     <Button
         android:id="@+id/create"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/textView1"
-        android:layout_marginBottom="27dp"
-        android:layout_toLeftOf="@+id/textView1"
-        android:text="create"
-        android:onClick="goToCreate" />
-
-    <Button
-        android:id="@+id/gamelist"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/PlayGame"
-        android:layout_toRightOf="@+id/textView1"
-        android:text="Button"
-        android:onClick="goToGameList" />
+        android:layout_alignLeft="@+id/gamelist"
+        android:layout_below="@+id/gamelist"
+        android:layout_marginTop="110dp"
+        android:onClick="goToCreate"
+        android:text="create" />
 
 </RelativeLayout>

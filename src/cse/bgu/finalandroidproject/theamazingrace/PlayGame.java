@@ -8,6 +8,7 @@ import java.util.Locale;
 import java.util.Random;
 
 import android.annotation.SuppressLint;
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -30,7 +31,9 @@ import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
+import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.PopupWindow;
@@ -116,13 +119,13 @@ implements	 OnMapClickListener, OnMapLongClickListener, OnCameraChangeListener{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_play_game);
-				
+
 		checkMyLocation = (Button) findViewById(R.id.checkMyLocation);
 		tScore = (TextView) findViewById(R.id.label_score);
 		gTimer = (Chronometer) findViewById(R.id.chronometer1);
-		
+
 		setUpMapIfNeeded();
-		
+
 		mAddress = (TextView) findViewById(R.id.address);
 		// The isPresent() helper method is only available on Gingerbread or above.
 		mGeocoderAvailable =
@@ -141,15 +144,15 @@ implements	 OnMapClickListener, OnMapLongClickListener, OnCameraChangeListener{
 						}
 					}
 				};
-				
-				
+
+
 				mHandler.post(new Runnable() {
 					@Override
 					public void run() {
 						myList = db.getEntireChallenges(getIntent().getStringExtra(Extras.GAME_NAME));
 						if (myIterator==null) 
 							myIterator = myList.iterator();
-							suffleAnswers(myIterator.next());
+						suffleAnswers(myIterator.next());
 					}
 				});
 				// Get a reference to the LocationManager object.
@@ -184,13 +187,13 @@ implements	 OnMapClickListener, OnMapLongClickListener, OnCameraChangeListener{
 			new EnableGpsDialogFragment().show(getSupportFragmentManager(), "enableGpsDialog");
 		}
 	}
-	
+
 	// Method to launch Settings
 	private void enableLocationSettings() {
 		Intent settingsIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
 		startActivity(settingsIntent);
 	}
-	
+
 	// Stop receiving location updates whenever the Activity becomes invisible.
 	@Override
 	protected void onStop() {
@@ -226,7 +229,7 @@ implements	 OnMapClickListener, OnMapLongClickListener, OnCameraChangeListener{
 		// up the UI thread.  Invoking reverse geocoding in an AsyncTask.
 		(new ReverseGeocodingTask(this)).execute(new Location[] {location});
 	}
-	
+
 	private void updateUILocation(Location location) {
 		// We're sending the update to a handler which then updates the UI with the new
 		// location.
@@ -441,13 +444,10 @@ implements	 OnMapClickListener, OnMapLongClickListener, OnCameraChangeListener{
 			if (checkArea()){ //we are in the right location
 				// if false alert the client and return
 				flag = false;
-				
-				// turn off location updates to save battery
-				mLocationManager.removeUpdates(listener);
 
 				LayoutInflater layoutInflater = (LayoutInflater)getBaseContext().getSystemService(LAYOUT_INFLATER_SERVICE);  
 				View popupView = layoutInflater.inflate(R.layout.popup_window, null);  
-				final PopupWindow popupWindow = new PopupWindow(popupView, 500/*LayoutParams.WRAP_CONTENT*/, 800/*LayoutParams.WRAP_CONTENT*/); 
+				final PopupWindow popupWindow = new PopupWindow(popupView, 600/*LayoutParams.WRAP_CONTENT*/, 900/*LayoutParams.WRAP_CONTENT*/); 
 
 				//setContentView(R.layout.popup_window);
 				bAnswer1 = (Button) popupView.findViewById(R.id.radioButton1);
@@ -465,6 +465,9 @@ implements	 OnMapClickListener, OnMapLongClickListener, OnCameraChangeListener{
 				dScore.setText("Your current score is: " + score);
 
 				popupWindow.showAsDropDown(checkMyLocation, 100, 100 );
+
+				// turn off location updates to save battery
+				mLocationManager.removeUpdates(listener);
 
 				bContinue.setOnClickListener(new View.OnClickListener() {
 
@@ -532,12 +535,6 @@ implements	 OnMapClickListener, OnMapLongClickListener, OnCameraChangeListener{
 	public void onCameraChange(final CameraPosition position) {
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.activity_play_game, menu);
-		return true;
-	}
 
 	public void resetAnswer() {
 		int i;
@@ -590,7 +587,7 @@ implements	 OnMapClickListener, OnMapLongClickListener, OnCameraChangeListener{
 			String fTime = calcTime();
 			LayoutInflater layoutInflater = (LayoutInflater)getBaseContext().getSystemService(LAYOUT_INFLATER_SERVICE);  
 			View popupView = layoutInflater.inflate(R.layout.end_game, null);  
-			final PopupWindow popupWindow = new PopupWindow(popupView, 500/*LayoutParams.WRAP_CONTENT*/, 800/*LayoutParams.WRAP_CONTENT*/); 
+			final PopupWindow popupWindow = new PopupWindow(popupView, 500/*LayoutParams.WRAP_CONTENT*/, 900/*LayoutParams.WRAP_CONTENT*/); 
 			eScore = (TextView) popupView.findViewById(R.id.endScore);
 			eTime = (TextView) popupView.findViewById(R.id.endTime);
 			eBack = (Button) popupView.findViewById(R.id.endButton1);
@@ -599,17 +596,15 @@ implements	 OnMapClickListener, OnMapLongClickListener, OnCameraChangeListener{
 			eTime.setText("You finshed the game in: \n" + fTime);
 			eScore.setText("With score of: " + score);
 			popupWindow.showAsDropDown(checkMyLocation, 100, 100 );
-			
-			
-			eBack.setOnClickListener(new View.OnClickListener() {
 
+			eBack.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					popupWindow.dismiss();
 				}
 			}
 					);
-			
+
 		}	
 	}
 
@@ -664,4 +659,67 @@ implements	 OnMapClickListener, OnMapLongClickListener, OnCameraChangeListener{
 		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		startActivity(intent);
 	}
+
+
+	@SuppressLint("NewApi")
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+
+		ActionBar actionBar;
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.activity_play_game, menu);
+		actionBar=getActionBar();
+		actionBar.setHomeButtonEnabled(true);
+		return true;
+	}
+
+
+	@Override
+	public boolean onMenuItemSelected(int featureId, android.view.MenuItem item) {
+		// TODO Auto-generated method stub
+		{
+			switch (item.getItemId()) {
+
+//			case R.id.menu_exit_app:
+//				DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+//					@Override
+//					public void onClick(DialogInterface dialog, int which) {
+//						switch (which){
+//						case DialogInterface.BUTTON_POSITIVE:
+//							//exitApp();
+//							Toast.makeText(getBaseContext(),"Need to exit app", Toast.LENGTH_LONG).show();
+//							break;
+//						case DialogInterface.BUTTON_NEGATIVE:
+//							break;
+//						}
+//					}
+//				};
+//
+//				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//				builder.setMessage("Are you sure?").setPositiveButton("Yes", dialogClickListener)
+//				.setNegativeButton("No", dialogClickListener).show();
+//				return true;
+				/*	    		SharedPreferences sharedPref = getSharedPreferences(MY_SHRD_PREF, Context.MODE_PRIVATE);
+            	SharedPreferences.Editor editor = sharedPref.edit();
+            	editor.putBoolean(EXIT_KEY, true);
+            	editor.commit();
+				Intent ext_intent = new Intent(this, cse.bgu.ex5.jokelistbook.JokesList.class);
+	            ext_intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(ext_intent);
+				finish();
+	    		return true;
+				 */	        
+			case R.id.menu_back_to_main_menu:
+				Intent intent = new Intent (this,MainActivity.class);
+				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(intent);
+			default:
+				return super.onMenuItemSelected(featureId, item);
+
+			}
+		}
+
+	}
+
 }
