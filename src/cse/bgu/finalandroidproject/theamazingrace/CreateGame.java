@@ -117,6 +117,7 @@ implements	 OnMapClickListener, OnMapLongClickListener, OnCameraChangeListener{
 						case UPDATE_LONG:
 							newAddress = (String)msg.obj;
 							mTapTextView.setText("tapped, point=" + newAddress);
+							mAddress.setText((String) msg.obj);
 							break;
 						}
 					}
@@ -390,7 +391,7 @@ implements	 OnMapClickListener, OnMapLongClickListener, OnCameraChangeListener{
 			tempLoc.setLatitude(point.latitude);
 			tempLoc.setLongitude(point.longitude);
 			doReverseGeocoding1(tempLoc, UPDATE_LONG);
-			
+
 		}	
 		currntPoint = point;// added marker on tapped point
 		createChallenge(currntPoint);
@@ -409,9 +410,9 @@ implements	 OnMapClickListener, OnMapLongClickListener, OnCameraChangeListener{
 		LayoutInflater layoutInflater = (LayoutInflater)getBaseContext().
 				getSystemService(LAYOUT_INFLATER_SERVICE);  
 		View popupView = layoutInflater.inflate(R.layout.fill_in_challenge, null);  
-		final PopupWindow popupWindow = new PopupWindow(popupView,700, 1000);
-		
-		
+		final PopupWindow popupWindow = new PopupWindow(popupView,600, 1000);
+
+
 		final EditText myChallenge = (EditText) popupView.findViewById(R.id.challenge);
 		final EditText answer1 = (EditText) popupView.findViewById(R.id.wrongAns1);
 		final EditText answer2 = (EditText) popupView.findViewById(R.id.wrongAns2);
@@ -432,7 +433,7 @@ implements	 OnMapClickListener, OnMapLongClickListener, OnCameraChangeListener{
 
 
 		popupWindow.setFocusable(true); 
-		popupWindow.showAsDropDown(getMyLocation, 0, 100);//showAsDropDown(getMyLocation);//some location on the layout)
+		popupWindow.showAsDropDown(getMyLocation, 0, -200);//showAsDropDown(getMyLocation);//some location on the layout)
 
 
 		buttonBack.setOnClickListener(new View.OnClickListener() {
@@ -518,14 +519,34 @@ implements	 OnMapClickListener, OnMapLongClickListener, OnCameraChangeListener{
 			Toast.makeText(this, "game added to db", Toast.LENGTH_LONG).show();
 			challengesList.clear();
 		}else
-			Toast.makeText(this, "you need to create at least one challenge before save", Toast.LENGTH_LONG).show();
-	}
-
-	public void backClicked (View view){
+			Toast.makeText(this, "you need to create at least one challenge before save", Toast.LENGTH_SHORT).show();
 		Intent intent = new Intent (this,MainActivity.class);
 		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		startActivity(intent);
+	}
 
+	public void backClicked (View view){
+
+		if(!challengesList.isEmpty())
+		{
+			DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					switch (which){
+					case DialogInterface.BUTTON_POSITIVE:
+						finish();
+						break;
+					case DialogInterface.BUTTON_NEGATIVE:
+						break;
+					}
+				}
+			};
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setMessage("you didnt save your game, are you sure?").setPositiveButton("Yes", dialogClickListener)
+			.setNegativeButton("No", dialogClickListener).show();
+		}
+		else
+			finish();
 	}
 
 

@@ -4,7 +4,7 @@
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
     android:alpha="1"
-    android:background="@drawable/game_over"
+    android:background="@drawable/hooray"
     android:gravity="end"
     android:orientation="vertical" >
 
@@ -12,18 +12,12 @@
         android:id="@+id/endTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true" 
-		android:layout_marginLeft="30dp"
-        android:layout_marginTop="40dp"/>
-
-    <Button
-        android:id="@+id/endButton1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="34dp"
-		android:onClick="goBack"
-        android:text="Back to Main Manu" />
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="40dp"
+        android:alpha="0.8"
+        android:background="@android:color/background_light"
+        android:textColor="@android:color/black" />
 
     <TextView
         android:id="@+id/endScore"
@@ -31,6 +25,18 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="30dp"
-        android:layout_marginTop="80dp"/>
+        android:layout_marginTop="80dp"
+        android:alpha="0.8"
+        android:background="@android:color/background_light"
+        android:textColor="@android:color/black" />
+
+    <Button
+        android:id="@+id/endButton1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="38dp"
+        android:background="@drawable/back"
+        android:onClick="goBack" />
 
 </RelativeLayout>

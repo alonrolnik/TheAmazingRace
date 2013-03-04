@@ -3,7 +3,4 @@
     <item android:id="@+id/menu_back_to_main_menu"
           android:title="Main Menu"
           android:showAsAction="ifRoom" />
-    <item android:id="@+id/help"
-          android:title="help"
-          android:showAsAction="ifRoom" />
 </menu>

@@ -2,8 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    android:background="@drawable/map" >
+    android:background="@drawable/main"
+    tools:context=".MainActivity" >
 
     <Button
         android:id="@+id/gamelist"
@@ -12,8 +12,8 @@
         android:layout_above="@+id/create"
         android:layout_alignParentLeft="true"
         android:layout_marginBottom="24dp"
-        android:onClick="goToGameList"
-        android:text="choose existng game" />
+        android:background="@drawable/playanexsitinggame"
+        android:onClick="goToGameList" />
 
     <Button
         android:id="@+id/create"
@@ -22,7 +22,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_marginBottom="64dp"
-        android:onClick="goToCreate"
-        android:text="create your own game" />
+        android:background="@drawable/createyourown"
+        android:onClick="goToCreate" />
 
 </RelativeLayout>

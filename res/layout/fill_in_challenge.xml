@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" >
+
+<RelativeLayout
     android:id="@+id/RelativeLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:alpha="1"
-    android:background="@android:color/white" >
+    android:background="@drawable/question1" >
 
     <LinearLayout
         android:id="@+id/linearLayout1"
@@ -47,41 +52,41 @@
         </EditText>
     </LinearLayout>
 
-    <Button
-        android:id="@+id/done"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/challenge"
-        android:layout_below="@+id/linearLayout1"
-        android:text="Done!" />
-
     <TextView
-        android:id="@+id/headerForCreate"
+        android:id="@+id/tAddress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/challenge"
-        android:layout_alignParentTop="true"
+        android:layout_alignLeft="@+id/linearLayout1"
+        android:layout_below="@+id/tLat"
         android:layout_marginTop="36dp"
-        android:text="Challenge location:"
+        android:text="Address:"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
         android:id="@+id/tLat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/headerForCreate"
-        android:layout_below="@+id/headerForCreate"
+        android:layout_alignLeft="@+id/linearLayout1"
         android:text="Lat:"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
-        android:id="@+id/tAddress"
+        android:id="@+id/tLong"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/tLat"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/headerForCreate"
+        android:text="Long:"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/headerForCreate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
         android:layout_below="@+id/tLat"
-        android:layout_marginTop="14dp"
-        android:text="Address:"
+        android:layout_marginTop="15dp"
+        android:text="Challenge location:"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <EditText
@@ -89,30 +94,30 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/linearLayout1"
-        android:layout_alignRight="@+id/linearLayout1"
+        android:layout_alignRight="@+id/done"
         android:layout_below="@+id/tAddress"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="24dp"
         android:ems="10"
         android:hint="here goes your challenge"
         android:inputType="textMultiLine" />
-
-    <TextView
-        android:id="@+id/tLong"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/challenge"
-        android:layout_below="@+id/headerForCreate"
-        android:text="Long:"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <Button
         android:id="@+id/back"
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/done"
         android:layout_alignBottom="@+id/done"
-        android:layout_alignLeft="@+id/linearLayout1"
-        android:text="back" />
+        android:layout_toLeftOf="@+id/done"
+        android:background="@drawable/back" />
+
+    <Button
+        android:id="@+id/done"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/linearLayout1"
+        android:layout_marginTop="44dp"
+        android:layout_toRightOf="@+id/headerForCreate"
+        android:background="@drawable/done" />
 
 </RelativeLayout>
+</ScrollView>

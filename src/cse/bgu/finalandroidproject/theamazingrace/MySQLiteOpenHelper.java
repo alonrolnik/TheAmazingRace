@@ -10,6 +10,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -248,7 +249,7 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 	    Cursor cursor = db.rawQuery("select DISTINCT tbl_name from sqlite_master where tbl_name = '"+tableName+"'", null);
 	    if(cursor!=null) {
 	        if(cursor.getCount()>0) {
-	                            cursor.close();
+	                     cursor.close();
 	            return true;
 	        }
 	                    cursor.close();
@@ -256,10 +257,27 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 	    return false;
 	}
 
-	public void remove_game(String table_name) {
+	public int remove_game(String game_name) {
 	    SQLiteDatabase db = this.getWritableDatabase();
-	    db.delete(table_name, null, new String[] {});
-	    db.delete(DB_Schema.GamLstTable.TABLE_NAME, DB_Schema.GamLstTable.GAME_NAME + "=" + table_name, null);
+	    db.delete(game_name, null, new String[] {});
+	    int flag = db.delete(DB_Schema.GamLstTable.TABLE_NAME, DB_Schema.GamLstTable.GAME_NAME  +"='"+game_name+"'" , null);
+	    db.close();
+	    return flag;
+	}
+	
+	public void insert_game_to_listOfGames(String game_name, String creator, String area){
+	    SQLiteDatabase db = this.getWritableDatabase();
+		ContentValues values = new ContentValues();
+		values.put(DB_Schema.GamLstTable.GAME_NAME, game_name);
+		values.put(DB_Schema.GamLstTable.CREATOR, creator);
+		values.put(DB_Schema.GamLstTable.AREA, area);
+		db.insert(DB_Schema.GamLstTable.TABLE_NAME, null, values);
+		db.close();
+	}
+	public void flush_listOfGames(){
+	    SQLiteDatabase db = this.getWritableDatabase();
+	    db.delete(DB_Schema.GamLstTable.TABLE_NAME, null, null);
 	    db.close();
 	}
 }
+

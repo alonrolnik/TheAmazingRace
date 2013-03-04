@@ -9,6 +9,9 @@ import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,7 +21,6 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
-
 /**
  * This class contains the necessary functions to
  * construct an http connection. 
@@ -31,7 +33,7 @@ public class Http_Interface{
 	//create functions for http get and post
 
 	// When user clicks button, calls AsyncTask.
-	// Before attempting to fetch the URL, makes sure that there is a network connection.
+	// Before attempting to fetch the URdelete row in a sqlite androidL, makes sure that there is a network connection.
 	// Gets the URL from the UI's text field.
 
 	/**
@@ -153,6 +155,12 @@ public class Http_Interface{
 		char[] buffer = new char[len];
 		reader.read(buffer);
 		return new String(buffer);
+	}
+
+	
+	public boolean test_parse(String toTest){
+		return false;
+		
 	}
 
 }

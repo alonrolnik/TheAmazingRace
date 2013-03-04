@@ -43,7 +43,7 @@
             android:id="@+id/label_address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/address"
+            android:text="Your addrees"
             android:textSize="22sp" />
 
         <TextView
@@ -69,9 +69,10 @@
             android:id="@+id/checkMyLocation"
             android:layout_width="110dp"
             android:layout_height="85dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:background="@drawable/go"
+            android:background="@drawable/getmylocation"
             android:onClick="checkMyLocation" />
 
     </RelativeLayout>

@@ -111,6 +111,7 @@ implements	 OnMapClickListener, OnMapLongClickListener, OnCameraChangeListener{
 
 	private String question;
 	private String [] answers = new String [4];
+	public String nextLocation;
 
 	// end new ************************************************
 
@@ -144,7 +145,6 @@ implements	 OnMapClickListener, OnMapLongClickListener, OnCameraChangeListener{
 						}
 					}
 				};
-
 
 				mHandler.post(new Runnable() {
 					@Override
@@ -447,7 +447,7 @@ implements	 OnMapClickListener, OnMapLongClickListener, OnCameraChangeListener{
 
 				LayoutInflater layoutInflater = (LayoutInflater)getBaseContext().getSystemService(LAYOUT_INFLATER_SERVICE);  
 				View popupView = layoutInflater.inflate(R.layout.popup_window, null);  
-				final PopupWindow popupWindow = new PopupWindow(popupView, 600/*LayoutParams.WRAP_CONTENT*/, 900/*LayoutParams.WRAP_CONTENT*/); 
+				final PopupWindow popupWindow = new PopupWindow(popupView, 400/*LayoutParams.WRAP_CONTENT*/, 1000/*LayoutParams.WRAP_CONTENT*/); 
 
 				//setContentView(R.layout.popup_window);
 				bAnswer1 = (Button) popupView.findViewById(R.id.radioButton1);
@@ -464,7 +464,7 @@ implements	 OnMapClickListener, OnMapLongClickListener, OnCameraChangeListener{
 				dQuestion.setText("Your question is: " + question);
 				dScore.setText("Your current score is: " + score);
 
-				popupWindow.showAsDropDown(checkMyLocation, 100, 100 );
+				popupWindow.showAsDropDown(checkMyLocation, 150, -150 );
 
 				// turn off location updates to save battery
 				mLocationManager.removeUpdates(listener);
@@ -564,12 +564,12 @@ implements	 OnMapClickListener, OnMapLongClickListener, OnCameraChangeListener{
 		currntPoint.setLatitude(curruntChallenge.getCheckpoint().latitude);
 		currntPoint.setLongitude(curruntChallenge.getCheckpoint().longitude);
 
-		if (mGeocoderAvailable) 
-			doReverseGeocoding(currntPoint);
-		else
+//		if (mGeocoderAvailable) 
+//			doReverseGeocoding(currntPoint);
+//		else
 			newAddress = "Your destination";
 
-		mMap.addMarker(new MarkerOptions().position(new LatLng(currntPoint.getLatitude(), currntPoint.getLongitude())).title(newAddress));	
+		mMap.addMarker(new MarkerOptions().position(new LatLng(currntPoint.getLatitude(), currntPoint.getLongitude()))).setTitle(newAddress);	
 		mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currntPoint.getLatitude(), currntPoint.getLongitude()), 14));
 	}
 
@@ -582,20 +582,20 @@ implements	 OnMapClickListener, OnMapLongClickListener, OnCameraChangeListener{
 		}
 
 		else {
-			Toast.makeText(this, "Game Over!", Toast.LENGTH_LONG).show();
+		//	Toast.makeText(this, "Game Over!", Toast.LENGTH_LONG).show();
 			gTimer.stop();
 			String fTime = calcTime();
 			LayoutInflater layoutInflater = (LayoutInflater)getBaseContext().getSystemService(LAYOUT_INFLATER_SERVICE);  
 			View popupView = layoutInflater.inflate(R.layout.end_game, null);  
-			final PopupWindow popupWindow = new PopupWindow(popupView, 500/*LayoutParams.WRAP_CONTENT*/, 900/*LayoutParams.WRAP_CONTENT*/); 
+			final PopupWindow popupWindow = new PopupWindow(popupView, 400/*LayoutParams.WRAP_CONTENT*/, 800/*LayoutParams.WRAP_CONTENT*/); 
 			eScore = (TextView) popupView.findViewById(R.id.endScore);
 			eTime = (TextView) popupView.findViewById(R.id.endTime);
 			eBack = (Button) popupView.findViewById(R.id.endButton1);
-			eTime.setTextColor(Color.CYAN);
-			eScore.setTextColor(Color.CYAN);
+			eTime.setTextColor(Color.BLACK);
+			eScore.setTextColor(Color.BLACK);
 			eTime.setText("You finshed the game in: \n" + fTime);
 			eScore.setText("With score of: " + score);
-			popupWindow.showAsDropDown(checkMyLocation, 100, 100 );
+			popupWindow.showAsDropDown(checkMyLocation, 150, -150);
 
 			eBack.setOnClickListener(new View.OnClickListener() {
 				@Override
@@ -660,7 +660,6 @@ implements	 OnMapClickListener, OnMapLongClickListener, OnCameraChangeListener{
 		startActivity(intent);
 	}
 
-
 	@SuppressLint("NewApi")
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -673,7 +672,6 @@ implements	 OnMapClickListener, OnMapLongClickListener, OnCameraChangeListener{
 		actionBar.setHomeButtonEnabled(true);
 		return true;
 	}
-
 
 	@Override
 	public boolean onMenuItemSelected(int featureId, android.view.MenuItem item) {
@@ -697,5 +695,4 @@ implements	 OnMapClickListener, OnMapLongClickListener, OnCameraChangeListener{
 		}
 
 	}
-
 }

@@ -1,5 +1,7 @@
 package cse.bgu.finalandroidproject.theamazingrace;
 
+import java.util.Map;
+
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
@@ -25,7 +27,6 @@ public class ListOfGames extends Activity
 {
 
 	MySQLiteOpenHelper db = new MySQLiteOpenHelper(this);
-	private CustomCursorAdapter customAdapter;
 	private ListView listView;
 
 	@Override
@@ -39,9 +40,15 @@ public class ListOfGames extends Activity
 			public void onItemClick(AdapterView<?> parent, View v, 
 					int position, long id) {
 				TextView tv = (TextView) v.findViewById(R.id.text_game_name);
+
+				if(!db.is_name_exist(tv.getText().toString().replace(" ","_"))){
+					Toast.makeText(getBaseContext(),"need to download from server not yet implemented", Toast.LENGTH_LONG).show();
+				}
+				else{
 				Intent mIntent = new Intent(getBaseContext(), PlayGame.class);
 				mIntent.putExtra(Extras.GAME_NAME, tv.getText().toString().replace(" ","_"));
 				startActivity(mIntent);
+				}
 			}				
 		}
 				);
@@ -50,7 +57,7 @@ public class ListOfGames extends Activity
 
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View v,
-					int position, long id) {
+					final int position, long id) {
 				// TODO Auto-generated method stub
 				final TextView tv = (TextView) v.findViewById(R.id.text_game_name);
 				DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
@@ -58,7 +65,19 @@ public class ListOfGames extends Activity
 					public void onClick(DialogInterface dialog, int which) {
 						switch (which){
 						case DialogInterface.BUTTON_POSITIVE:
-							db.remove_game(tv.getText().toString().replace(" ","_"));
+							if(db.is_name_exist(tv.getText().toString().replace(" ","_"))){
+							new Handler().post(new Runnable() {
+								@Override
+								public void run() {
+									if(db.remove_game(tv.getText().toString().replace(" ","_")) != 1)
+										Toast.makeText(getBaseContext(),"failed to delete not on local", Toast.LENGTH_SHORT).show();
+										db.close();
+									onResume();
+								}
+							});
+							}
+							else
+								Toast.makeText(getBaseContext(),"game not on the local DB", Toast.LENGTH_SHORT).show();
 							break;
 						case DialogInterface.BUTTON_NEGATIVE:
 							break;
@@ -74,18 +93,24 @@ public class ListOfGames extends Activity
 		// Database query can be a time consuming task ..
 		// so its safe to call database query in another thread
 		// Handler, will handle this stuff for you :)
+//		new Handler().post (new Runnable() {
+//			@Override
+//			public void run() {
+//				parse_list_of_games("aaa--alon--ar\nmoran seek--moran--beersheva\nThe mighty race--tal--beersheva");
+//			}
+//		});
 
-		new Handler().post(new Runnable() {
-			@Override
-			public void run() {
-				customAdapter = new CustomCursorAdapter(ListOfGames.this, db.get_all_games());
-				listView.setAdapter(customAdapter);
-				db.close();
-			}
-		});
 	}
 
 
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		CustomCursorAdapter customAdapter = new CustomCursorAdapter(ListOfGames.this, db.get_all_games());
+		listView.setAdapter(customAdapter);
+
+	}
 
 	@SuppressLint("NewApi")
 	@Override
@@ -139,5 +164,15 @@ public class ListOfGames extends Activity
 		}
 
 	}
+	
+	private void parse_list_of_games(String to_parse){
+		String[] result = to_parse.split("\\n");
+		for (int i = 0; i < result.length; i++) {
+			String params[] = result[i].split("--");
+			db.insert_game_to_listOfGames(params[0], params[1], params[2]);
+		}
+		
+	}
+
 
 }

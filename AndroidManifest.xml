@@ -81,6 +81,12 @@
             android:label="@string/title_activity_help"
             android:uiOptions="splitActionBarWhenNarrow" >
         </activity>
+        <activity
+            android:name="cse.bgu.finalandroidproject.theamazingrace.Login"
+            android:label="@string/title_activity_login"
+            android:uiOptions="splitActionBarWhenNarrow" >
+        </activity>
+        
     </application>
 
     <uses-feature

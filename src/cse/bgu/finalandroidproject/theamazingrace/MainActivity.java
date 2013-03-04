@@ -19,10 +19,21 @@ import com.google.android.gms.maps.model.LatLng;
 
 public class MainActivity extends Activity {
 
+	public final static String FILE_NAME = "userloginname.txt";
+	public static String userNew;
+	public static boolean returning;
+	public static int failedtolog = 0;
+	public final static int Exit = 99;
+	public static boolean firstuse = false;
 	MySQLiteOpenHelper db = new MySQLiteOpenHelper(this);
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		if(!firstuse){
+		Intent addintent = new Intent(MainActivity.this, Login.class);
+		startActivity(addintent);
+		firstuse=true;
+		}
 		setContentView(R.layout.activity_main);
 		//initTest();
 	}
@@ -77,7 +88,6 @@ public class MainActivity extends Activity {
 						switch (which){
 						case DialogInterface.BUTTON_POSITIVE:
 							finish();
-							Toast.makeText(getBaseContext(),"Need to exit app", Toast.LENGTH_LONG).show();
 							break;
 						case DialogInterface.BUTTON_NEGATIVE:
 							break;

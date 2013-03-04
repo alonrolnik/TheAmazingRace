@@ -8,6 +8,8 @@
     <string name="title_activity_score_board">ScoreBoard</string>
     <string name="title_activity_list_of_games">ListOfGames</string>
     <string name="title_activity_view_game">ViewGame</string>
+    <string name="title_activity_login">Login</string>
+    
     <string name="title_activity_start_play">StartPlay</string>
     <string name="title_activity_create_new_game">CreateNewGame</string>
     <string name="title_activity_user_menu">UserMenu</string>
