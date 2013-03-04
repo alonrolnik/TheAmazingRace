@@ -30,7 +30,7 @@ public class Login extends Activity {
 	final int MINIMUM_CHAR = 1;
 	final int MaxUserNameLength = 30;
 	public final static String FILE_NAME = "userloginname.txt";
-	public final String url = "http://1.gameamazingrace.appspot.com/";
+	public final String url = "http://1.amazingracegamenew.appspot.com/";
 	private String userFile;
 	ProgressDialog pdialog;
 	public Handler handler;
@@ -130,7 +130,7 @@ public class Login extends Activity {
 
 	private void GetHttpResponse(){
 		org.apache.http.Header[] headers;
-		String SndUrl =url+"wel?user="+MainActivity.userNew.replace(" ", "_");
+		String SndUrl =url+"wel?user="+MainActivity.userNew.replace(" ", "%20");
 		boolean newuser = false;
 		DefaultHttpClient httpClient = new DefaultHttpClient();
 		HttpRequestBase httpRequest = new HttpGet(SndUrl);

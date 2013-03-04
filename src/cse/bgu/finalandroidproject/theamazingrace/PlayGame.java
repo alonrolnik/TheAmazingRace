@@ -570,7 +570,7 @@ implements	 OnMapClickListener, OnMapLongClickListener, OnCameraChangeListener{
 			newAddress = "Your destination";
 
 		mMap.addMarker(new MarkerOptions().position(new LatLng(currntPoint.getLatitude(), currntPoint.getLongitude()))).setTitle(newAddress);	
-		mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currntPoint.getLatitude(), currntPoint.getLongitude()), 14));
+		mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currntPoint.getLatitude(), currntPoint.getLongitude()), 10));
 	}
 
 	public void nextPoint() {
