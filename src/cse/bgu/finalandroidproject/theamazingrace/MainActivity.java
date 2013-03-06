@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -24,41 +23,37 @@ public class MainActivity extends Activity {
 	public static boolean returning;
 	public static int failedtolog = 0;
 	public final static int Exit = 99;
-	public static boolean firstuse = false;
+
 	MySQLiteOpenHelper db = new MySQLiteOpenHelper(this);
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		if(!firstuse){
-		Intent addintent = new Intent(MainActivity.this, Login.class);
-		startActivity(addintent);
-		firstuse=true;
-		}
 		setContentView(R.layout.activity_main);
+		super.onCreate(savedInstanceState);
 		//initTest();
 	}
-	
+
 	public void goToCreate(View view){
 		startActivity(new Intent(this, CreateGameInstructions.class));
 	}
-	
+
 	public void goToGameList(View view){
 		startActivity(new Intent(this, ListOfGames.class));
 	}
 
 	public void initTest(){
 		List<Challenge> list = new ArrayList<Challenge>();
-	    Challenge newChallenge[] = {new Challenge (new LatLng(31.25, 34.85), "Whats my name?", "Alon", new String[] {"Tal", "Oscar", "Gil"}),
+		Challenge newChallenge[] = {new Challenge (new LatLng(31.25, 34.85), "Whats my name?", "Alon", new String[] {"Tal", "Oscar", "Gil"}),
 				new Challenge (new LatLng(31.15, 34.75), "What is the color of Napolion's white horse?", "White", new String[] {"Black", "Red", "Blue"}), 
 				new Challenge (new LatLng(31.2, 34.8), "How meny meters are in one nautical mile?", "1852", new String[] {"1609", "1734", "1586"}),
 				new Challenge (new LatLng(31.3, 34.9), "Where are we?", "All the answers are correct", new String[] {"bilding 95", "lab 105", "B.G.U"})};
-	    for (int i = 0; i < newChallenge.length; i++) {
+		for (int i = 0; i < newChallenge.length; i++) {
 			list.add(newChallenge[i]);
-	    }
-	    Game game = new Game("Alon", "the_mighty_race3", "Beer Sheva Israel", list);
-	    db.addGame(game);
+		}
+		Game game = new Game("Alon", "the_mighty_race3", "Beer Sheva Israel", list);
+		db.addGame(game,true);
 	}
-	
+
 
 	@SuppressLint("NewApi")
 	@Override
@@ -70,7 +65,7 @@ public class MainActivity extends Activity {
 		inflater.inflate(R.menu.activity_main, menu);
 		actionBar=getActionBar();
 		actionBar.setHomeButtonEnabled(true);
-		
+
 		return true;
 	}
 
@@ -99,24 +94,15 @@ public class MainActivity extends Activity {
 				builder.setMessage("Are you sure?").setPositiveButton("Yes", dialogClickListener)
 				.setNegativeButton("No", dialogClickListener).show();
 				return true;
-				/*	    		SharedPreferences sharedPref = getSharedPreferences(MY_SHRD_PREF, Context.MODE_PRIVATE);
-            	SharedPreferences.Editor editor = sharedPref.edit();
-            	editor.putBoolean(EXIT_KEY, true);
-            	editor.commit();
-				Intent ext_intent = new Intent(this, cse.bgu.ex5.jokelistbook.JokesList.class);
-	            ext_intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-				startActivity(ext_intent);
-				finish();
-	    		return true;
-				 */	        
-				
 			case R.id.About:
 				startActivity(new Intent(this, AboutActivity.class));
 			default:
-					 return super.onMenuItemSelected(featureId, item);
+				return super.onMenuItemSelected(featureId, item);
 
 			}
 		}
 
 	}
+
+
 }

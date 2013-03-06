@@ -167,7 +167,7 @@ containing a value of this type.
         public static final int treasurechest=0x7f02001a;
     }
     public static final class id {
-        public static final int About=0x7f04003d;
+        public static final int About=0x7f04003e;
         public static final int LinearLayout1=0x7f04001a;
         public static final int RelativeLayout1=0x7f04001f;
         public static final int address=0x7f04000c;
@@ -193,7 +193,7 @@ containing a value of this type.
         public static final int gamelist=0x7f040018;
         public static final int get_my_loc=0x7f04000b;
         public static final int headerForCreate=0x7f04002e;
-        public static final int help_play_game=0x7f04003e;
+        public static final int help_play_game=0x7f04003f;
         public static final int imageView1=0x7f040008;
         public static final int label_address=0x7f04001e;
         public static final int label_score=0x7f04001b;
@@ -203,8 +203,8 @@ containing a value of this type.
         public static final int loginname=0x7f040016;
         public static final int map=0x7f04000a;
         public static final int menu_back_to_main_menu=0x7f04003b;
-        public static final int menu_exit_app=0x7f04003c;
-        public static final int menu_return_to_game=0x7f04003f;
+        public static final int menu_exit_app=0x7f04003d;
+        public static final int menu_return_to_game=0x7f040040;
         public static final int none=0x7f040000;
         public static final int normal=0x7f040001;
         public static final int popuplayout=0x7f040021;
@@ -228,6 +228,7 @@ containing a value of this type.
         public static final int text_area=0x7f040033;
         public static final int text_creator=0x7f040032;
         public static final int text_game_name=0x7f040031;
+        public static final int update_list=0x7f04003c;
         public static final int wrongAns1=0x7f040028;
         public static final int wrongAns2=0x7f040029;
         public static final int wrongAns3=0x7f04002a;
@@ -256,11 +257,12 @@ containing a value of this type.
         public static final int help=0x7f080006;
     }
     public static final class string {
-        public static final int action_settings=0x7f050024;
-        public static final int action_sign_in_register=0x7f05002a;
-        public static final int action_sign_in_short=0x7f05002b;
-        public static final int address=0x7f05001a;
-        public static final int app_name=0x7f05000b;
+        public static final int action_settings=0x7f050025;
+        public static final int action_sign_in_register=0x7f05002b;
+        public static final int action_sign_in_short=0x7f05002c;
+        public static final int address=0x7f05001b;
+        public static final int app_name=0x7f05001a;
+        public static final int applicatiom_name=0x7f05000b;
         public static final int check_my_location=0x7f05000c;
         /**  Button in confirmation dialog to enable Google Play services.  Clicking it
         will direct user to application settings of Google Play services where they
@@ -305,41 +307,41 @@ containing a value of this type.
         Google Play services (from Play Store) [CHAR LIMIT=40] 
          */
         public static final int common_google_play_services_update_title=0x7f050007;
-        public static final int enable_gps=0x7f05001b;
-        public static final int enable_gps_dialog=0x7f05001c;
-        public static final int error_field_required=0x7f050031;
-        public static final int error_incorrect_password=0x7f050030;
-        public static final int error_invalid_email=0x7f05002e;
-        public static final int error_invalid_password=0x7f05002f;
+        public static final int enable_gps=0x7f05001c;
+        public static final int enable_gps_dialog=0x7f05001d;
+        public static final int error_field_required=0x7f050032;
+        public static final int error_incorrect_password=0x7f050031;
+        public static final int error_invalid_email=0x7f05002f;
+        public static final int error_invalid_password=0x7f050030;
         public static final int hello_world=0x7f05000d;
-        public static final int latlng=0x7f05001d;
-        public static final int login_progress_signing_in=0x7f05002d;
-        public static final int menu_forgot_password=0x7f05002c;
+        public static final int latlng=0x7f05001e;
+        public static final int login_progress_signing_in=0x7f05002e;
+        public static final int menu_forgot_password=0x7f05002d;
         public static final int menu_settings=0x7f05000e;
         public static final int move_the_camera=0x7f050019;
-        public static final int not_support_gps=0x7f05001f;
-        public static final int not_support_network=0x7f050020;
+        public static final int not_support_gps=0x7f050020;
+        public static final int not_support_network=0x7f050021;
         /**  Strings related to login 
          */
-        public static final int prompt_email=0x7f050028;
-        public static final int prompt_password=0x7f050029;
+        public static final int prompt_email=0x7f050029;
+        public static final int prompt_password=0x7f05002a;
         public static final int tap_instructions=0x7f050018;
-        public static final int title_activity_about=0x7f050026;
-        public static final int title_activity_create_game=0x7f050023;
-        public static final int title_activity_create_game_instructions=0x7f050025;
+        public static final int title_activity_about=0x7f050027;
+        public static final int title_activity_create_game=0x7f050024;
+        public static final int title_activity_create_game_instructions=0x7f050026;
         public static final int title_activity_create_new_game=0x7f050014;
-        public static final int title_activity_help=0x7f050027;
+        public static final int title_activity_help=0x7f050028;
         public static final int title_activity_list_of_games=0x7f050010;
-        public static final int title_activity_login=0x7f050012;
+        public static final int title_activity_login=0x7f050013;
         public static final int title_activity_main=0x7f050017;
         public static final int title_activity_play_game=0x7f050016;
         public static final int title_activity_score_board=0x7f05000f;
-        public static final int title_activity_start_play=0x7f050013;
+        public static final int title_activity_start_play=0x7f050012;
         public static final int title_activity_user_menu=0x7f050015;
         public static final int title_activity_view_game=0x7f050011;
-        public static final int unknown=0x7f05001e;
-        public static final int use_both_providers=0x7f050022;
-        public static final int use_fine_provider=0x7f050021;
+        public static final int unknown=0x7f05001f;
+        public static final int use_both_providers=0x7f050023;
+        public static final int use_fine_provider=0x7f050022;
     }
     public static final class style {
         /** 

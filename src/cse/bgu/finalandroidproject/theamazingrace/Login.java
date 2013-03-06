@@ -16,6 +16,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -51,6 +52,8 @@ public class Login extends Activity {
 				boolean success = msg.getData().getBoolean("success");
 				if (success){
 					MainActivity.returning = msg.getData().getBoolean("Exist");
+					Intent addintent = new Intent(Login.this, MainActivity.class);
+					startActivity(addintent);
 					finish();
 				}
 				else{
@@ -130,7 +133,7 @@ public class Login extends Activity {
 
 	private void GetHttpResponse(){
 		org.apache.http.Header[] headers;
-		String SndUrl =url+"wel?user="+MainActivity.userNew.replace(" ", "%20");
+		String SndUrl =(url+"wel?user="+MainActivity.userNew).replace(" ", "%20");
 		boolean newuser = false;
 		DefaultHttpClient httpClient = new DefaultHttpClient();
 		HttpRequestBase httpRequest = new HttpGet(SndUrl);

@@ -10,12 +10,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-import android.widget.Toast;
-
-import com.google.android.gms.maps.model.LatLng;
 
 public class MySQLiteOpenHelper extends SQLiteOpenHelper {
-	
+
 	public static final int DATABASE_VERSION = 1;
 	private static final 	String[] projection_game = {
 		DB_Schema.GmeScenro._ID,
@@ -26,59 +23,59 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 		DB_Schema.GmeScenro.ANSWER1,
 		DB_Schema.GmeScenro.ANSWER2,
 		DB_Schema.GmeScenro.ANSWER3,
-};
- 
+	};
+
 	//create helper object to manipulate database
 	public MySQLiteOpenHelper(Context context) {
 		super(context, DB_Schema.dbName, null, DATABASE_VERSION);
 		// TODO Auto-generated constructor stub
 	}
-	
+
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		// TODO Auto-generated method stub
-//		// create user table
-//        db.execSQL
-//        		(
-//	        		"create table " +
-//	        		DB_Schema.UserDetails.TABLE_NAME +
-//	        		"(" +
-//	        		DB_Schema.UserDetails._ID +
-//	        		" integer primary key autoincrement, " +
-//	        		DB_Schema.UserDetails.USER_NAME + "text ," +
-//	        		DB_Schema.UserDetails.PASSWORD + "text ," +
-//	        		DB_Schema.UserDetails.EMAIL + "text ," +
-//	        		"text not null" +
-//	        		" );"
-//        		);	
-//        
-     // create games list table
-        db.execSQL
-        		(
-	        		"create table " +
-	        		DB_Schema.GamLstTable.TABLE_NAME +
-	        		"(" +
-	        		DB_Schema.GamLstTable._ID +
-	        		" integer primary key autoincrement, " +
-	        		DB_Schema.GamLstTable.GAME_NAME + " text ," +
-	        		DB_Schema.GamLstTable.CREATOR + " text ," +
-	        		DB_Schema.GamLstTable.AREA + " text" +
-	        		" );"
-        		);
-//     // create game statistics table
-//        db.execSQL
-//        		(
-//	        		"create table " +
-//	        		DB_Schema.GamStatsc.TABLE_NAME +
-//	        		"(" +
-//	        		DB_Schema.GamStatsc._ID +
-//	        		" integer primary key autoincrement, " +
-//	        		DB_Schema.GamStatsc.DATE + "text ," +
-//	        		DB_Schema.GamStatsc.SCORE + "Integer ," +
-//	        		DB_Schema.GamStatsc.TIME_TO_FINISH + "Integer ," +
-//	        		" );"
-//        		);
-//     // create game scenario table
+		//		// create user table
+		//        db.execSQL
+		//        		(
+		//	        		"create table " +
+		//	        		DB_Schema.UserDetails.TABLE_NAME +
+		//	        		"(" +
+		//	        		DB_Schema.UserDetails._ID +
+		//	        		" integer primary key autoincrement, " +
+		//	        		DB_Schema.UserDetails.USER_NAME + "text ," +
+		//	        		DB_Schema.UserDetails.PASSWORD + "text ," +
+		//	        		DB_Schema.UserDetails.EMAIL + "text ," +
+		//	        		"text not null" +
+		//	        		" );"
+		//        		);	
+		//        
+		// create games list table
+		db.execSQL
+		(
+				"create table " +
+						DB_Schema.GamLstTable.TABLE_NAME +
+						"(" +
+						DB_Schema.GamLstTable._ID +
+						" integer primary key autoincrement, " +
+						DB_Schema.GamLstTable.GAME_NAME + " text ," +
+						DB_Schema.GamLstTable.CREATOR + " text ," +
+						DB_Schema.GamLstTable.AREA + " text" +
+						" );"
+				);
+		//     // create game statistics table
+		//        db.execSQL
+		//        		(
+		//	        		"create table " +
+		//	        		DB_Schema.GamStatsc.TABLE_NAME +
+		//	        		"(" +
+		//	        		DB_Schema.GamStatsc._ID +
+		//	        		" integer primary key autoincrement, " +
+		//	        		DB_Schema.GamStatsc.DATE + "text ," +
+		//	        		DB_Schema.GamStatsc.SCORE + "Integer ," +
+		//	        		DB_Schema.GamStatsc.TIME_TO_FINISH + "Integer ," +
+		//	        		" );"
+		//        		);
+		//     // create game scenario table
 	}
 
 	@Override
@@ -88,7 +85,7 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 		// create tables again
 		onCreate(db);
 	}
-	
+
 	/**
 	 * add specific challenge to game_name table
 	 * @param challenge
@@ -105,23 +102,24 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 		values.put(DB_Schema.GmeScenro.ANSWER2, challenge.getWrong_answers(1));
 		values.put(DB_Schema.GmeScenro.ANSWER3, challenge.getWrong_answers(2));
 		values.put(DB_Schema.GmeScenro.RIGHT_ANSWER, challenge.getRight_answer());
-		
+
 		//inserting row
 		db = this.getWritableDatabase();
 		long r_id = db.insert(game_name, null, values);
 		db.close(); // closing db connection
 		return r_id;
 	}
-	
-	
+
+
 	/**
 	 * insert a complete game into the db.
 	 * this will create new table that it name is game.game_name
 	 * and add a row in the games list db
 	 * @param game
 	 */
-	public void addGame(Game game){
+	public void addGame(Game game, boolean local){
 		SQLiteDatabase db = this.getWritableDatabase();
+		String fixname = game.getGame_name().replace(" ", "_");
 		Challenge challenge;
 		long r_id;
 		ContentValues chal_values = new ContentValues();
@@ -129,7 +127,7 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 
 		db.execSQL
 		(
-				"create table " + game.getGame_name() +
+				"create table " + fixname +
 				" (" +
 				DB_Schema.GmeScenro._ID +
 				" integer primary key autoincrement, " +
@@ -148,10 +146,11 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 		values.put(DB_Schema.GamLstTable.GAME_NAME, game.getGame_name());
 		values.put(DB_Schema.GamLstTable.CREATOR, game.getCreator());
 		values.put(DB_Schema.GamLstTable.AREA, game.getArea());
-		
-		// insert game properties to game list table
-		db.insert(DB_Schema.GamLstTable.TABLE_NAME, null, values);
 
+		// insert game properties to game list table
+		if (local){
+			db.insert(DB_Schema.GamLstTable.TABLE_NAME, null, values);
+		}
 		Iterator<Challenge> it = game.getGame_challenges().iterator();
 		while (it.hasNext()) {
 			challenge = it.next();
@@ -164,24 +163,23 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 			chal_values.put(DB_Schema.GmeScenro.RIGHT_ANSWER, challenge.getRight_answer());
 
 			//inserting row
-			r_id = db.insert(game.game_name, null, chal_values);
+			r_id = db.insert(fixname, null, chal_values);
 			if(r_id == -1)
 				Log.d("error inserting challenge", "Error inserting challeng");
 		}
 		db.close(); // closing db connection
-
 	}
-	
+
 	/**
 	 * call this method if you want list of all games
 	 * @return
 	 */
 	public Cursor get_all_games(){
-		
+
 		SQLiteDatabase db = getReadableDatabase();
 		Cursor mCursor = db.query(DB_Schema.GamLstTable.TABLE_NAME,null , null, null, null, null, null); 
 		//db.close();
-        //mCursor.close();
+		//mCursor.close();
 
 		return mCursor;
 	}
@@ -197,9 +195,9 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 		Cursor c = db.query(
 				game_name,
 				projection_game, DB_Schema.GmeScenro._ID + "=?",
-					new String[] { String.valueOf(id) },
-					null, null, null);
-		
+				new String[] { String.valueOf(id) },
+				null, null, null);
+
 		if (c != null)
 			if (c.moveToFirst())
 				Log.d("cursor ","C is true");
@@ -208,17 +206,17 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 		return curToChallenge(c);
 	}
 
-	
+
 	private Challenge curToChallenge(Cursor c) {
 		// TODO Auto-generated method stub
 		Challenge challenge = new Challenge();
 		challenge.setChallenge(c.getString(3));
 		challenge.setWrong_answers(new String [] {c.getString(5), c.getString(6), c.getString(7)});
-		challenge.setCheckpoint( new LatLng(c.getDouble(1), c.getDouble(2)));
+		challenge.setCheckpoint(c.getDouble(1), c.getDouble(2));
 		challenge.setRight_answer(c.getString(4));
 		return challenge;
 	}
-	
+
 	/**
 	 * get the whole challenges of the game_name game 
 	 * @param game_name
@@ -227,10 +225,10 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 	public List<Challenge> getEntireChallenges(String game_name){
 		List<Challenge> list = new ArrayList<Challenge>();
 		SQLiteDatabase db = this.getReadableDatabase();
-	Cursor c = db.query(
-			game_name,
-			projection_game, null,
-			null, null, null, null);
+		Cursor c = db.query(
+				game_name,
+				projection_game, null,
+				null, null, null, null);
 		c.moveToFirst();
 		while(!c.isAfterLast()){
 			Challenge challenge = curToChallenge(c);
@@ -240,33 +238,34 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 		c.close();
 		db.close();
 		return list;
-		
+
 	}
 
 	public boolean is_name_exist(String tableName) {
 		SQLiteDatabase db = this.getReadableDatabase();
-		
-	    Cursor cursor = db.rawQuery("select DISTINCT tbl_name from sqlite_master where tbl_name = '"+tableName+"'", null);
-	    if(cursor!=null) {
-	        if(cursor.getCount()>0) {
-	                     cursor.close();
-	            return true;
-	        }
-	                    cursor.close();
-	    }
-	    return false;
+		boolean res = false;
+		Cursor cursor = db.rawQuery("select DISTINCT tbl_name from sqlite_master where tbl_name = '"+tableName+"'", null);
+		if(cursor!=null) {
+			if(cursor.getCount()>0) {
+				res = true;
+				cursor.close();
+			}
+			cursor.close();
+		}
+		return res;
 	}
 
+
 	public int remove_game(String game_name) {
-	    SQLiteDatabase db = this.getWritableDatabase();
-	    db.delete(game_name, null, new String[] {});
-	    int flag = db.delete(DB_Schema.GamLstTable.TABLE_NAME, DB_Schema.GamLstTable.GAME_NAME  +"='"+game_name+"'" , null);
-	    db.close();
-	    return flag;
+		SQLiteDatabase db = this.getWritableDatabase();
+		db.execSQL("DROP TABLE IF EXISTS "+game_name.replace(" ", "_"));
+		int flag = db.delete(DB_Schema.GamLstTable.TABLE_NAME, DB_Schema.GamLstTable.GAME_NAME  +"='"+game_name+"'" , null);
+		db.close();
+		return flag;
 	}
-	
+
 	public void insert_game_to_listOfGames(String game_name, String creator, String area){
-	    SQLiteDatabase db = this.getWritableDatabase();
+		SQLiteDatabase db = this.getWritableDatabase();
 		ContentValues values = new ContentValues();
 		values.put(DB_Schema.GamLstTable.GAME_NAME, game_name);
 		values.put(DB_Schema.GamLstTable.CREATOR, creator);
@@ -275,9 +274,9 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 		db.close();
 	}
 	public void flush_listOfGames(){
-	    SQLiteDatabase db = this.getWritableDatabase();
-	    db.delete(DB_Schema.GamLstTable.TABLE_NAME, null, null);
-	    db.close();
+		SQLiteDatabase db = this.getWritableDatabase();
+		db.delete(DB_Schema.GamLstTable.TABLE_NAME, null, null);
+		db.close();
 	}
 }
 

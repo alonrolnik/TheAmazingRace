@@ -33,7 +33,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
-import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.PopupWindow;
@@ -570,7 +569,7 @@ implements	 OnMapClickListener, OnMapLongClickListener, OnCameraChangeListener{
 			newAddress = "Your destination";
 
 		mMap.addMarker(new MarkerOptions().position(new LatLng(currntPoint.getLatitude(), currntPoint.getLongitude()))).setTitle(newAddress);	
-		mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currntPoint.getLatitude(), currntPoint.getLongitude()), 10));
+		mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currntPoint.getLatitude(), currntPoint.getLongitude()), 14));
 	}
 
 	public void nextPoint() {
@@ -601,6 +600,11 @@ implements	 OnMapClickListener, OnMapLongClickListener, OnCameraChangeListener{
 				@Override
 				public void onClick(View v) {
 					popupWindow.dismiss();
+					Intent intent = new Intent (getBaseContext(),MainActivity.class);
+					intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+					startActivity(intent);
+					finish();
+
 				}
 			}
 					);
@@ -654,11 +658,6 @@ implements	 OnMapClickListener, OnMapLongClickListener, OnCameraChangeListener{
 		}
 	}	
 
-	public void goBack(View view) {
-		Intent intent = new Intent (this,MainActivity.class);
-		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		startActivity(intent);
-	}
 
 	@SuppressLint("NewApi")
 	@Override
@@ -679,9 +678,11 @@ implements	 OnMapClickListener, OnMapLongClickListener, OnCameraChangeListener{
 		{
 			switch (item.getItemId()) {
 			case R.id.menu_back_to_main_menu:
+				myIterator=null;
 				Intent intent = new Intent (this,MainActivity.class);
 				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				startActivity(intent);
+				finish();
 				return true;
 			case R.id.help_play_game:
 				Intent intent2 = new Intent (this,HelpActivity.class);

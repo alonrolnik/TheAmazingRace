@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">TheAmazigRace</string>
+    <string name="applicatiom_name">The Amazig Race</string>
     <string name="check_my_location">Check my location !!!</string>
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
     <string name="title_activity_score_board">ScoreBoard</string>
     <string name="title_activity_list_of_games">ListOfGames</string>
     <string name="title_activity_view_game">ViewGame</string>
-    <string name="title_activity_login">Login</string>
-    
     <string name="title_activity_start_play">StartPlay</string>
+    <string name="title_activity_login">Login</string>
     <string name="title_activity_create_new_game">CreateNewGame</string>
     <string name="title_activity_user_menu">UserMenu</string>
     <string name="title_activity_play_game">PlayGame</string>

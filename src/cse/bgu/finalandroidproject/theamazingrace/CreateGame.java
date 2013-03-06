@@ -5,10 +5,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.impl.client.DefaultHttpClient;
+
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -79,6 +85,15 @@ implements	 OnMapClickListener, OnMapLongClickListener, OnCameraChangeListener{
 	private String creator;
 	private List<Challenge> challengesList = new ArrayList<Challenge>();
 	MySQLiteOpenHelper db = new MySQLiteOpenHelper(this);
+	
+	ProgressDialog ap_pdialog;
+	public Handler ap_handler;
+	public static int num_of_points;
+	public static int addedpoints = 0;
+	public static String points[];
+	public static int currentGameindex;
+	
+	public final String url = "http://1.amazingracegamenew.appspot.com/";
 
 	@SuppressLint("NewApi")
 	@Override
@@ -86,6 +101,20 @@ implements	 OnMapClickListener, OnMapLongClickListener, OnCameraChangeListener{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_create_game);
 
+		ap_handler = new Handler(){
+			@Override
+			public void handleMessage(Message msg) {
+				ap_pdialog.cancel();
+				boolean success = msg.getData().getBoolean("success");
+				if (success){
+					addedpoints++;
+					if (addedpoints==num_of_points){
+						addedpoints=0;
+					}
+				}
+			}
+		};
+		
 		game_name = getIntent().getStringExtra(Extras.GAME_NAME);
 		area = getIntent().getStringExtra(Extras.Area);
 		creator = getIntent().getStringExtra(Extras.Creator);
@@ -513,18 +542,59 @@ implements	 OnMapClickListener, OnMapLongClickListener, OnCameraChangeListener{
 		}
 	}
 	public void bSaveClicked(View view){
+		Challenge currentchallenge;
+		int i=0;
 		if(!challengesList.isEmpty()){
+			points = new String[challengesList.size()];
 			Game game = new Game(creator, game_name, area, challengesList);
-			db.addGame(game);
+			while (i < challengesList.size()){
+				currentchallenge = challengesList.get(i);
+				points[i] = ("gameid="+currentGameindex+"&lat="+currentchallenge.getCheckpoint().latitude+"&lon="+currentchallenge.getCheckpoint().longitude+"&question="+currentchallenge.getChallenge()+"&correct="+currentchallenge.getRight_answer()+"&w1="+currentchallenge.getWrong_answers(0)+"&w2="+currentchallenge.getWrong_answers(1)+"&w3="+currentchallenge.getWrong_answers(2)).replace(" ", "%20");
+				i++;
+			}
+			num_of_points=i;
+			ap_pdialog = ProgressDialog.show(CreateGame.this, "checking if game name exist...", "Please wait");
+			new Thread(new Runnable() {
+				public void run() {
+					int i=0;
+					while (i < num_of_points){
+						ap_GetHttpResponse(i);
+						i++;
+					}
+				}
+			}).start();
+			db.addGame(game,true);
 			Toast.makeText(this, "game added to db", Toast.LENGTH_LONG).show();
 			challengesList.clear();
+			Intent intent = new Intent (this,MainActivity.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(intent);
+			finish();
 		}else
 			Toast.makeText(this, "you need to create at least one challenge before save", Toast.LENGTH_SHORT).show();
-		Intent intent = new Intent (this,MainActivity.class);
-		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		startActivity(intent);
 	}
 
+	private void ap_GetHttpResponse(int number){
+		String point = points[number];
+		String SndUrl =url+"addpoint?"+point;
+		DefaultHttpClient httpClient = new DefaultHttpClient();
+		HttpRequestBase httpRequest = new HttpGet(SndUrl);
+
+		Message msg = ap_handler.obtainMessage();
+		Bundle bundle = new Bundle();
+
+		try {
+			httpClient.execute(httpRequest);
+			bundle.putBoolean("success", true);
+		} catch (ClientProtocolException e) {
+			bundle.putBoolean("success", false);
+		} catch (IOException e) {
+			bundle.putBoolean("success", false);
+		}
+		msg.setData(bundle);
+		ap_handler.sendMessage(msg);
+	}
+	
 	public void backClicked (View view){
 
 		if(!challengesList.isEmpty())
@@ -604,6 +674,7 @@ implements	 OnMapClickListener, OnMapLongClickListener, OnCameraChangeListener{
 				Intent intent = new Intent (this,MainActivity.class);
 				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				startActivity(intent);
+				finish();
 				return true;
 			default:
 				return super.onMenuItemSelected(featureId, item);

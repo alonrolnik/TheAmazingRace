@@ -2,6 +2,7 @@ package cse.bgu.finalandroidproject.theamazingrace;
 
 import com.google.android.gms.maps.model.LatLng;
 
+
 /**
  * This class define Game properties
  * @author alon
@@ -31,8 +32,9 @@ public class Challenge {
 	public LatLng getCheckpoint() {
 		return checkpoint;
 	}
-	public void setCheckpoint(LatLng checkpoint) {
-		this.checkpoint = checkpoint;
+	public void setCheckpoint(Double lat, Double lon) {
+		this.checkpoint = new LatLng(lat,lon);
+		
 	}
 	public String getChallenge() {
 		return challenge;
